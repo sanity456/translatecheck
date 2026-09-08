@@ -4,7 +4,8 @@ import {
   TransactionHashVariant,
   type TransactionHash,
 } from 'genlayer-js/types';
-import { DEPLOYMENT } from './deployment';
+import { DEPLOYMENT, CORRECTIONS_DEPLOYMENT } from './deployment';
+import type { SuggestionReader } from './corrections';
 import {
   executionSucceeded,
   plain,
@@ -17,6 +18,25 @@ export const configured = /^0x[0-9a-fA-F]{40}$/.test(DEPLOYMENT.address);
 export const reader = createClient({ chain: studionet });
 export const explorer = 'https://explorer-studio.genlayer.com';
 export const contractAddress = DEPLOYMENT.address as `0x${string}`;
+export const correctionsAddress =
+  CORRECTIONS_DEPLOYMENT.address as `0x${string}`;
+export const correctionsConfigured = /^0x[0-9a-fA-F]{40}$/.test(
+  correctionsAddress,
+);
+export const readSuggestion: SuggestionReader = async (id) => {
+  if (!correctionsConfigured)
+    throw new Error(
+      'Corrections are being configured. You can still edit and recheck manually.',
+    );
+  return plain(
+    await reader.readContract({
+      address: correctionsAddress,
+      functionName: 'get_suggestion',
+      args: [id],
+      transactionHashVariant: TransactionHashVariant.LATEST_FINAL,
+    }),
+  ) as Awaited<ReturnType<SuggestionReader>>;
+};
 export async function read<K extends keyof ViewSpec>(
   functionName: K,
   args: ViewSpec[K]['args'],

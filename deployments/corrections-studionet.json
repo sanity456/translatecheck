@@ -1,0 +1,166 @@
+{
+  "network": "studionet",
+  "chain_id": 61999,
+  "checker": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+  "source_sha256": "a927245bef02f7c52c719b4be898729aed1eb94932010d28e65f32b5112b4acc",
+  "started_at": "2026-09-08T09:00:25.788Z",
+  "transactions": [
+    {
+      "hash": "0x6fdb80f9f303a6bddbf96720893ccb96813adc4e2db8dc8c00bd781f5c724747",
+      "status": "FINALIZED",
+      "execution_success": true
+    },
+    {
+      "hash": "0x296442bb8946dfe494a0e083f9d4a5f4002f75230060190bcdf962ebc2ba9bea",
+      "status": "FINALIZED",
+      "execution_success": true
+    },
+    {
+      "hash": "0xd389e995129f6b565717817bd2d61b1c60e02cd274f566d746cedb0d51fabe80",
+      "status": "FINALIZED",
+      "execution_success": true
+    },
+    {
+      "hash": "0x9eab033a33613a2a961f95cc69bd3cf6a8930640b2b84af65fcc578d0a0becbf",
+      "status": "FINALIZED",
+      "execution_success": true
+    },
+    {
+      "hash": "0xefa1a1ca89ff2468e3a579c0ec875f9c8fc5102694231e39325a3aff65fcbbb2",
+      "status": "FINALIZED",
+      "execution_success": true
+    },
+    {
+      "hash": "0x0e1bf724d8ec7140e4252e46c34043296abb5a025ec6942045509eddd621a522",
+      "status": "FINALIZED",
+      "execution_success": true
+    }
+  ],
+  "checks": [
+    {
+      "parent_id": "f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+      "target": "fr",
+      "revision_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+      "original_unchanged": true,
+      "original_blocked": true,
+      "suggestion_advisory_only": true,
+      "prior_revision_found": true,
+      "gate_before": {
+        "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "gate_after_separate_assessment": {
+        "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "suggestion": {
+        "advisory_only": true,
+        "checker": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "created_at": "2026-09-08T09:01:10.337577Z",
+        "found": true,
+        "original_translation": "Livraison gratuite pour les commandes de moins de 50 $.",
+        "parent_id": "f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+        "policy": "translatecheck/correction-v1",
+        "requested_by": "0xD9557a407D809ee8EBc18100eaFc45fBc81bf3e8",
+        "requires_separate_assessment": true,
+        "source": "Free delivery on orders over $50.",
+        "suggestion": {
+          "explanation": "I corrected the condition from “de moins de 50 $” to “de plus de 50 $” so it matches the source phrase “over $50.” The rest of the meaning remains unchanged.",
+          "status": "SUGGESTED",
+          "translation": "Livraison gratuite pour les commandes de plus de 50 $."
+        },
+        "target": "fr"
+      }
+    },
+    {
+      "parent_id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+      "target": "es",
+      "revision_id": "d2b9317643e73e713a7fd62352da815ff70e6d57fd2628fdcbf8e15ff204e52f",
+      "original_unchanged": true,
+      "original_blocked": true,
+      "suggestion_advisory_only": true,
+      "prior_revision_found": false,
+      "gate_before": {
+        "assessment_id": "d2b9317643e73e713a7fd62352da815ff70e6d57fd2628fdcbf8e15ff204e52f",
+        "failure_reasons": [
+          "ASSESSMENT_NOT_FOUND"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      },
+      "gate_after_separate_assessment": {
+        "assessment_id": "d2b9317643e73e713a7fd62352da815ff70e6d57fd2628fdcbf8e15ff204e52f",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "suggestion": {
+        "advisory_only": true,
+        "checker": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "created_at": "2026-09-08T09:02:21.262147Z",
+        "found": true,
+        "original_translation": "Envío gratis en pedidos de menos de 50 $.",
+        "parent_id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+        "policy": "translatecheck/correction-v1",
+        "requested_by": "0xD9557a407D809ee8EBc18100eaFc45fBc81bf3e8",
+        "requires_separate_assessment": true,
+        "source": "Free delivery on orders over $50.",
+        "suggestion": {
+          "explanation": "The original translation incorrectly used 'menos de' (less than) instead of 'más de' (over/more than). This correction restores the original condition for free delivery eligibility.",
+          "status": "SUGGESTED",
+          "translation": "Envío gratis en pedidos de más de 50 $."
+        },
+        "target": "es"
+      }
+    },
+    {
+      "parent_id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+      "target": "zh-CN",
+      "revision_id": "e234c500d912cc6eb7bc5bf354db338b4bc500f9c9c34f15cd9bf055e6156508",
+      "original_unchanged": true,
+      "original_blocked": true,
+      "suggestion_advisory_only": true,
+      "prior_revision_found": false,
+      "gate_before": {
+        "assessment_id": "e234c500d912cc6eb7bc5bf354db338b4bc500f9c9c34f15cd9bf055e6156508",
+        "failure_reasons": [
+          "ASSESSMENT_NOT_FOUND"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      },
+      "gate_after_separate_assessment": {
+        "assessment_id": "e234c500d912cc6eb7bc5bf354db338b4bc500f9c9c34f15cd9bf055e6156508",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "suggestion": {
+        "advisory_only": true,
+        "checker": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "created_at": "2026-09-08T09:04:26.280710Z",
+        "found": true,
+        "original_translation": "La reunión empieza a las nueve de la mañana.",
+        "parent_id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+        "policy": "translatecheck/correction-v1",
+        "requested_by": "0xD9557a407D809ee8EBc18100eaFc45fBc81bf3e8",
+        "requires_separate_assessment": true,
+        "source": "The meeting starts at 9 am.",
+        "suggestion": {
+          "explanation": "The prior translation was in Spanish, not Mandarin Chinese as requested. The corrected translation into Simplified Chinese accurately conveys the original meaning, including the time reference and the fact that the meeting starts at 9 am.",
+          "status": "SUGGESTED",
+          "translation": "会议在上午9点开始。"
+        },
+        "target": "zh-CN"
+      }
+    }
+  ],
+  "address": "0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e",
+  "deployment_tx": "0x6fdb80f9f303a6bddbf96720893ccb96813adc4e2db8dc8c00bd781f5c724747",
+  "source_exact": true,
+  "completed_at": "2026-09-08T09:06:07.775Z"
+}

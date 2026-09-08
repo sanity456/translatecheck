@@ -19,6 +19,8 @@ import {
   ExternalLink,
   RefreshCw,
   CircleHelp,
+  WandSparkles,
+  PencilLine,
 } from 'lucide-react';
 import {
   Select,
@@ -70,9 +72,12 @@ import { EXAMPLES, SOURCE } from '@/lib/examples';
 import {
   configured,
   contractAddress,
+  correctionsAddress,
+  correctionsConfigured,
   explorer,
   ExecutionError,
   read,
+  readSuggestion,
   waitForFinalized,
   writer,
 } from '@/lib/chain';
@@ -86,6 +91,14 @@ import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
 import { RequestFeedback } from '@/lib/feedback';
 import { reconcilePending } from '@/lib/recovery';
+import {
+  checkedSuggestion,
+  validateAssessment,
+  validateComparison,
+  recoverCorrectionPending,
+  quoteParts,
+  type Suggestion,
+} from '@/lib/corrections';
 
 const PENDING_KEY = 'translatecheck:pending:61999:' + DEPLOYMENT.address;
 const STOPPED_KEY = PENDING_KEY + ':last-stopped';
@@ -104,9 +117,17 @@ function recoverPending(): Pending | null {
       p &&
       /^0x[0-9a-fA-F]{64}$/.test(p.hash) &&
       /^[0-9a-f]{64}$/.test(p.id) &&
-      ['assess', 'publish'].includes(p.action)
+      ['assess', 'publish', 'suggest'].includes(p.action) &&
+      (p.revisionParentId === undefined ||
+        /^[0-9a-f]{64}$/.test(p.revisionParentId))
     ) {
       validateDraft(p.source, p.translation, p.target);
+      if (
+        p.revisionDraft !== undefined &&
+        (typeof p.revisionDraft !== 'string' ||
+          Array.from(p.revisionDraft).length > 1200)
+      )
+        return null;
       return p;
     }
   } catch {
@@ -125,6 +146,8 @@ export default function Workspace() {
   const [target, setTarget] = useState<Language>('fr');
   const [tab, setTab] = useState('check');
   const [assessment, setAssessment] = useState<Assessment | null>(null);
+  const [revisionParent, setRevisionParent] = useState<Assessment | null>(null);
+  const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
   const [gate, setGate] = useState<Gate | null>(null);
   const [publication, setPublication] = useState<{
     found: boolean;
@@ -196,6 +219,8 @@ export default function Workspace() {
     setSource(d.source);
     setTranslation(d.translation);
     setTarget(d.target);
+    setRevisionParent(null);
+    setSuggestion(null);
     clearResult();
     setTab('check');
     setError('');
@@ -225,7 +250,7 @@ export default function Workspace() {
       setHistoryLoading(false);
     }
   }
-  const openRecord = useCallback(async (id: string) => {
+  const openRecord = useCallback(async (id: string, parentId?: string) => {
     if (!/^[0-9a-f]{64}$/.test(id))
       throw new Error('Invalid assessment identifier.');
     const request = ++recordRequest.current;
@@ -234,6 +259,19 @@ export default function Workspace() {
       throw new Error(
         'That assessment was not found in finalized chain state.',
       );
+    await validateAssessment(record, id);
+    let parent: Assessment | null = null;
+    if (parentId) {
+      if (!/^[0-9a-f]{64}$/.test(parentId))
+        throw new Error('Invalid comparison identifier.');
+      const previous = await read('get_assessment', [parentId]);
+      if (!previous.found)
+        throw new Error(
+          'The original assessment for this comparison was not found.',
+        );
+      await validateComparison(previous, record);
+      parent = previous;
+    }
     const policy = await read('evaluate_policy_view', [
       id,
       record.source,
@@ -245,11 +283,17 @@ export default function Workspace() {
     setTranslation(record.translation);
     setTarget(record.target);
     setAssessment(record);
+    setRevisionParent(parent);
+    setSuggestion(null);
     setGate(policy);
     setPublication({ found: false });
     setTab('check');
     setError('');
-    window.history.replaceState(null, '', '?assessment=' + id);
+    window.history.replaceState(
+      null,
+      '',
+      '?assessment=' + id + (parent ? '&compare=' + parent.id : ''),
+    );
   }, []);
 
   useEffect(() => {
@@ -271,7 +315,9 @@ export default function Workspace() {
           if (active) setHistoryLoading(false);
         });
     const id = new URLSearchParams(window.location.search).get('assessment');
-    if (id) void openRecord(id).catch((e) => setError(safeError(e)));
+    const compare =
+      new URLSearchParams(window.location.search).get('compare') || undefined;
+    if (id) void openRecord(id, compare).catch((e) => setError(safeError(e)));
     return () => {
       active = false;
       discovery.current?.stop();
@@ -349,7 +395,23 @@ export default function Workspace() {
       controller.signal,
     );
     // Completion requires successful execution AND a finalized state read.
-    await openRecord(p.id);
+    if (p.action === 'suggest') {
+      const parent = await read('get_assessment', [p.id]);
+      if (!parent.found)
+        throw new Error(
+          'The original assessment is not visible yet. Resume tracking.',
+        );
+      const draft = await checkedSuggestion(await readSuggestion(p.id), parent);
+      clearResult();
+      setSource(parent.source);
+      setTarget(parent.target);
+      setTranslation(p.revisionDraft ?? parent.translation);
+      setRevisionParent(parent);
+      setSuggestion(draft);
+      setTab('check');
+    } else {
+      await openRecord(p.id, p.revisionParentId);
+    }
     if (p.action === 'publish') {
       const publisher = receipt.sender || receipt.from_address;
       if (!publisher)
@@ -367,7 +429,9 @@ export default function Workspace() {
     setNotice(
       p.action === 'publish'
         ? 'Exact translation published in the on-chain registry.'
-        : 'Assessment finalized. The result below is read from GenLayer.',
+        : p.action === 'suggest'
+          ? 'Correction ready to review. It is a draft, not an assessment or permission to publish.'
+          : 'Assessment finalized. The result below is read from GenLayer.',
     );
     void loadHistory();
   }
@@ -396,9 +460,18 @@ export default function Workspace() {
     tracking.current?.abort();
     try {
       clearResult();
+      setRevisionParent(null);
+      setSuggestion(null);
       setNotice('Checking finalized records before stopping local tracking…');
       // Bounded and read-only: an unavailable network must not trap the user here.
-      const result = await reconcilePending(saved, read);
+      const correction =
+        saved.action === 'suggest'
+          ? await recoverCorrectionPending(saved, read, readSuggestion)
+          : null;
+      const result =
+        saved.action === 'suggest'
+          ? { kind: 'unknown' as const }
+          : await reconcilePending(saved, read);
       setLastStoppedHash(saved.hash);
       try {
         localStorage.setItem(STOPPED_KEY, saved.hash);
@@ -412,17 +485,36 @@ export default function Workspace() {
         setTranslation(result.assessment.translation);
         setTarget(result.assessment.target);
         setAssessment(result.assessment);
+        setRevisionParent(result.revisionParent ?? null);
         setGate(result.gate);
         setPublication(result.publication);
         setTab('check');
-        window.history.replaceState(null, '', '?assessment=' + saved.id);
+        window.history.replaceState(
+          null,
+          '',
+          '?assessment=' +
+            saved.id +
+            (result.revisionParent
+              ? '&compare=' + result.revisionParent.id
+              : ''),
+        );
+      }
+      if (correction) {
+        setSource(correction.parent.source);
+        setTranslation(saved.revisionDraft ?? correction.parent.translation);
+        setTarget(correction.parent.target);
+        setRevisionParent(correction.parent);
+        setSuggestion(correction.suggestion);
+        setTab('check');
       }
       setNotice(
-        result.kind === 'found' && result.completed
-          ? saved.action === 'publish'
-            ? 'Tracking stopped. The submitting wallet’s publication is already in finalized chain state. No transaction was sent.'
-            : 'Tracking stopped. An assessment for the exact saved text is finalized and loaded below. This does not confirm the original transaction’s status.'
-          : 'Local tracking stopped. The transaction’s outcome is still unconfirmed and it may finish later. Nothing was canceled or resubmitted. Check its link before retrying the same action.',
+        correction
+          ? 'Tracking stopped. A finalized advisory correction is available below. A separate assessment is still required; no transaction was sent.'
+          : result.kind === 'found' && result.completed
+            ? saved.action === 'publish'
+              ? 'Tracking stopped. The submitting wallet’s publication is already in finalized chain state. No transaction was sent.'
+              : 'Tracking stopped. An assessment for the exact saved text is finalized and loaded below. This does not confirm the original transaction’s status.'
+            : 'Local tracking stopped. The transaction’s outcome is still unconfirmed and it may finish later. Nothing was canceled or resubmitted. Check its link before retrying the same action.',
       );
     } catch (e) {
       setNotice('');
@@ -454,27 +546,88 @@ export default function Workspace() {
       setBusy(false);
     }
   }
-  async function submit(action: 'assess' | 'publish') {
+  function beginRevision(record: Assessment) {
+    if (busyRef.current || pending) return;
+    setRevisionParent(record);
+    setSuggestion(null);
+    setSource(record.source);
+    setTranslation(record.translation);
+    setTarget(record.target);
+    clearResult();
+    setNotice(
+      'Request a correction, or edit the translation yourself. Every revision needs its own meaning check.',
+    );
+  }
+  function useSuggestion() {
+    if (
+      busyRef.current ||
+      pending ||
+      !revisionParent ||
+      suggestion?.suggestion.status !== 'SUGGESTED'
+    )
+      return;
+    setTranslation(suggestion.suggestion.translation);
+    clearResult();
+    setNotice(
+      'Suggestion copied into your revision. Review it, then choose Recheck revision. It is not approved yet.',
+    );
+  }
+  async function submit(action: Pending['action']) {
     if (busyRef.current || pending) return;
     busyRef.current = true;
     setBusy(true);
     setError('');
     setNotice('');
     try {
-      validateDraft(source, translation, target);
+      if (action === 'suggest' && revisionParent)
+        validateDraft(
+          revisionParent.source,
+          revisionParent.translation,
+          revisionParent.target,
+        );
+      else validateDraft(source, translation, target);
       if (!configured)
         throw new Error('Live deployment is not yet configured.');
-      const id = await contentId(source, translation, target);
+      if (
+        action === 'assess' &&
+        revisionParent &&
+        translation.trim() === revisionParent.translation.trim()
+      )
+        throw new Error(
+          'Change the translation before rechecking a revision. The original assessment is unchanged.',
+        );
+      const id =
+        action === 'suggest' && revisionParent
+          ? revisionParent.id
+          : await contentId(source, translation, target);
+      if (action === 'suggest') {
+        if (!revisionParent)
+          throw new Error(
+            'Open a failed assessment and choose Fix & recheck first.',
+          );
+        if (!correctionsConfigured)
+          throw new Error(
+            'Corrections are being configured. You can still edit and recheck manually.',
+          );
+        const existing = await readSuggestion(id);
+        if (existing.found) {
+          setSuggestion(await checkedSuggestion(existing, revisionParent));
+          setNotice(
+            'The existing correction draft is ready to review. No transaction was needed, and it is not a publication approval.',
+          );
+          return;
+        }
+      }
       if (action === 'assess') {
         const existing = await read('get_assessment', [id]);
         if (existing.found) {
-          await openRecord(id);
+          await openRecord(id, revisionParent?.id);
           setNotice(
             'This exact translation was already assessed. Reusing its immutable result; no transaction is needed.',
           );
           return;
         }
-      } else {
+      } else if (action === 'publish') {
         if (!assessment || assessment.id !== id)
           throw new Error('Check this exact text before publishing.');
         const current = await read('evaluate_policy_view', [
@@ -499,7 +652,7 @@ export default function Workspace() {
       if (action === 'publish') {
         const existing = await read('get_publication', [id, account]);
         if (existing.found) {
-          await openRecord(id);
+          await openRecord(id, revisionParent?.id);
           setPublication(existing);
           setNotice(
             'This wallet’s exact translation is already published. No transaction was sent.',
@@ -524,11 +677,13 @@ export default function Workspace() {
         );
       const client = writer(account, selectedWallet.provider);
       const args =
-        action === 'assess'
-          ? [source, translation, target]
-          : [id, source, translation, target];
+        action === 'suggest'
+          ? [id]
+          : action === 'assess'
+            ? [source, translation, target]
+            : [id, source, translation, target];
       const hash = await client.writeContract({
-        address: contractAddress,
+        address: action === 'suggest' ? correctionsAddress : contractAddress,
         functionName: action,
         args,
         value: 0n,
@@ -538,10 +693,17 @@ export default function Workspace() {
         hash,
         action,
         id,
-        source,
-        translation,
-        target,
+        source: action === 'suggest' ? revisionParent!.source : source,
+        translation:
+          action === 'suggest' ? revisionParent!.translation : translation,
+        target: action === 'suggest' ? revisionParent!.target : target,
         account,
+        ...(action !== 'suggest' && revisionParent
+          ? { revisionParentId: revisionParent.id }
+          : {}),
+        ...(action === 'suggest' && Array.from(translation).length <= 1200
+          ? { revisionDraft: translation }
+          : {}),
       };
       savePending(p);
       setTxStatus('SUBMITTED');
@@ -558,6 +720,7 @@ export default function Workspace() {
 
   const isExample =
     !assessment &&
+    !revisionParent &&
     source === SOURCE &&
     translation === EXAMPLES[target].translation;
   const review =
@@ -613,7 +776,11 @@ export default function Workspace() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p>
                 <strong>
-                  {pending.action === 'assess' ? 'Assessment' : 'Publication'}{' '}
+                  {pending.action === 'assess'
+                    ? 'Assessment'
+                    : pending.action === 'suggest'
+                      ? 'Correction'
+                      : 'Publication'}{' '}
                   transaction
                 </strong>{' '}
                 · {txStatus || 'Tracking paused'}
@@ -675,7 +842,10 @@ export default function Workspace() {
                 <div className="surface">
                   <div className="surface-head">
                     <h2>
-                      <span className="step">01</span>Your translation
+                      <span className="step">01</span>
+                      {revisionParent
+                        ? 'Edit your revision'
+                        : 'Your translation'}
                     </h2>
                     <FileCheck2 size={20} className="subtle" />
                   </div>
@@ -689,7 +859,7 @@ export default function Workspace() {
                         id="source"
                         value={source}
                         maxLength={2400}
-                        disabled={busy}
+                        disabled={busy || !!revisionParent}
                         placeholder="Paste your original English text…"
                         onChange={(e) => {
                           setSource(e.target.value);
@@ -703,10 +873,12 @@ export default function Workspace() {
                     </div>
                     <div className="editor-cell">
                       <div className="editor-label">
-                        <label htmlFor="translation">Translation</label>
+                        <label htmlFor="translation">
+                          {revisionParent ? 'Your revision' : 'Translation'}
+                        </label>
                         <Select
                           value={target}
-                          disabled={busy}
+                          disabled={busy || !!revisionParent}
                           onValueChange={(v) => {
                             if (v) {
                               setTarget(v as Language);
@@ -758,10 +930,20 @@ export default function Workspace() {
                     </p>
                     <button
                       className="primary"
-                      disabled={busy || !!pending}
+                      disabled={
+                        busy ||
+                        !!pending ||
+                        (!!revisionParent &&
+                          translation.trim() ===
+                            revisionParent.translation.trim())
+                      }
                       onClick={() => void submit('assess')}
                     >
-                      {busy ? 'Working…' : 'Check meaning'}
+                      {busy
+                        ? 'Working…'
+                        : revisionParent
+                          ? 'Recheck revision'
+                          : 'Check meaning'}
                       <ArrowRight size={16} />
                     </button>
                   </div>
@@ -798,6 +980,163 @@ export default function Workspace() {
                     No style or fluency score
                   </span>
                 </div>
+                {revisionParent && (
+                  <section
+                    className="surface revision-panel"
+                    aria-labelledby="revision-title"
+                  >
+                    <div className="surface-head">
+                      <h2 id="revision-title">
+                        <PencilLine size={19} /> Fix & recheck
+                      </h2>
+                      <button
+                        className="secondary"
+                        disabled={busy || !!pending}
+                        onClick={() => {
+                          setRevisionParent(null);
+                          setSuggestion(null);
+                          window.history.replaceState(
+                            null,
+                            '',
+                            assessment
+                              ? '?assessment=' + assessment.id
+                              : window.location.pathname,
+                          );
+                        }}
+                      >
+                        Exit comparison
+                      </button>
+                    </div>
+                    <div className="result-body">
+                      <p className="subtle">
+                        Request a draft correction or edit the translation
+                        above. Suggested text is never automatically assessed or
+                        published.
+                      </p>
+                      <div className="revision-actions">
+                        <button
+                          className="secondary"
+                          disabled={busy || !!pending || !correctionsConfigured}
+                          onClick={() => void submit('suggest')}
+                        >
+                          <WandSparkles size={16} />
+                          {suggestion
+                            ? 'Reload correction'
+                            : 'Request correction'}
+                        </button>
+                        <span className="footnote">
+                          A new suggestion needs a wallet approval. Existing
+                          drafts can be reused.
+                        </span>
+                      </div>
+                      {suggestion && (
+                        <div className="suggestion-box">
+                          <span className="badge">
+                            {suggestion.suggestion.status === 'SUGGESTED'
+                              ? 'Suggested draft · not an approval'
+                              : 'Human input needed'}
+                          </span>
+                          {suggestion.suggestion.status === 'SUGGESTED' && (
+                            <p className="revision-text" lang={target}>
+                              {suggestion.suggestion.translation}
+                            </p>
+                          )}
+                          <p>{suggestion.suggestion.explanation}</p>
+                          {suggestion.suggestion.status === 'SUGGESTED' && (
+                            <button
+                              className="secondary mt-3"
+                              disabled={busy || !!pending}
+                              onClick={useSuggestion}
+                            >
+                              Use suggestion
+                            </button>
+                          )}
+                        </div>
+                      )}
+                      <div className="comparison-grid">
+                        <div>
+                          <h3>Before · original check</h3>
+                          <span
+                            className={
+                              'status ' +
+                              (revisionParent.review.verdict === 'REVIEW'
+                                ? 'review'
+                                : '')
+                            }
+                          >
+                            {LABELS[revisionParent.review.verdict]}
+                          </span>
+                          <p className="revision-text" lang={target}>
+                            {quoteParts(
+                              revisionParent.translation,
+                              revisionParent.review.translation_quote,
+                            ).map((part, i) =>
+                              part.highlighted ? (
+                                <mark key={i}>{part.text}</mark>
+                              ) : (
+                                <span key={i}>{part.text}</span>
+                              ),
+                            )}
+                          </p>
+                          <p className="subtle">
+                            {revisionParent.review.explanation}
+                          </p>
+                          <a
+                            className="text-sm"
+                            href={'?assessment=' + revisionParent.id}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Open original assessment ↗
+                          </a>
+                        </div>
+                        <div>
+                          <h3>After · your revision</h3>
+                          <span
+                            className={
+                              'status ' +
+                              (assessment?.review.verdict === 'PRESERVED'
+                                ? 'preserved'
+                                : 'review')
+                            }
+                          >
+                            {assessment
+                              ? LABELS[assessment.review.verdict]
+                              : 'Not assessed · publication blocked'}
+                          </span>
+                          <p className="revision-text" lang={target}>
+                            {translation || 'Edit the translation above.'}
+                          </p>
+                          <p className="subtle">
+                            {assessment
+                              ? assessment.review.explanation
+                              : 'A fresh check of this exact text is required. The old result stays unchanged.'}
+                          </p>
+                          {assessment && (
+                            <a
+                              className="text-sm"
+                              href={
+                                '?assessment=' +
+                                assessment.id +
+                                '&compare=' +
+                                revisionParent.id
+                              }
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Open verified comparison ↗
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <p className="footnote mt-4">
+                        Highlighted text is the original assessment’s cited
+                        phrase. This comparison does not claim authorship or a
+                        certified translation.
+                      </p>
+                    </div>
+                  </section>
+                )}
               </section>
               <aside className="surface" aria-live="polite">
                 <div className="surface-head">
@@ -866,6 +1205,17 @@ export default function Workspace() {
                           Publish exact translation <ArrowRight size={16} />
                         </button>
                       )}
+                      {assessment &&
+                        assessment.review.verdict !== 'PRESERVED' &&
+                        !revisionParent && (
+                          <button
+                            className="primary w-full mt-5"
+                            disabled={busy || !!pending}
+                            onClick={() => beginRevision(assessment)}
+                          >
+                            <PencilLine size={16} /> Fix & recheck
+                          </button>
+                        )}
                       {assessment && (
                         <div className="mt-5 space-y-2">
                           <p className="footnote">

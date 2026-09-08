@@ -2,6 +2,36 @@
 
 Verification records: 2026-09-08 UTC.
 
+## Fix & Recheck release
+
+- 61 direct contract tests pass: the original 32 plus 29 correction tests,
+  including explicitly invoked validator callbacks rejecting unfaithful output,
+  truthy strings/numbers in place of a boolean, malformed leader output and errors.
+  These are mocked tests, not an accuracy benchmark. Cross-contract reads are
+  stubbed in direct mode; the live test below exercises the actual call.
+- 49 frontend tests pass. Coverage includes correction binding to the exact original, advisory
+  flags, malformed/unchanged drafts, Unicode quote highlighting, validated
+  before/after links, cancellation, bounded recovery, and no automatic writes.
+  Actual Workspace handlers verify adoption cannot approve, edits invalidate an
+  approval, revisions call the checker separately, and existing results are reused.
+- The native correction companion at `0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e`
+  was deployed on StudioNet and its exact source hash verified:
+  `a927245bef02f7c52c719b4be898729aed1eb94932010d28e65f32b5112b4acc`.
+- Live consensus produced advisory corrections for French, Spanish and Mandarin.
+  All three originals remained unchanged and blocked. French reused a pre-existing
+  independently finalized assessment of its corrected text; Spanish and Mandarin
+  had no assessment at first and were confirmed blocked, then separately assessed
+  and confirmed preserved. No publication was created by this test. See
+  `deployments/corrections-studionet.json` for transaction hashes, texts and gates.
+- The original checker address, meaning policy and source are unchanged. There
+  is no Bradbury migration. Site and repository access remain private.
+- These new UI tests are isolated handler tests, not browser E2E. A fresh browser
+  and wallet-extension signing walkthrough of Request correction → Use suggestion
+  → Recheck revision remains unverified. Earlier browser evidence does not cover
+  this new feature. Hosted CI must be checked separately for the release commit.
+
+The records below describe earlier releases and are retained as history.
+
 - 32 direct contract tests passed on Windows/Python 3.12, including separately
   invoked validator callbacks for agreement, substantive disagreement, malformed
   evidence, and error handling. Mocked model outputs are not live AI accuracy tests.

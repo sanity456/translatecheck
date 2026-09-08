@@ -7,6 +7,7 @@ import ts from 'typescript';
 import * as React from 'react';
 import * as protocol from '../lib/protocol.ts';
 import * as recovery from '../lib/recovery.ts';
+import * as corrections from '../lib/corrections.ts';
 import * as wallet from '../lib/wallet.ts';
 import { DEPLOYMENT } from '../lib/deployment.ts';
 import type { FinalizedReader } from '../lib/recovery.ts';
@@ -49,6 +50,13 @@ export function workspaceHarness(options: {
   storage?: Map<string, string>;
   read: FinalizedReader;
   wait?: () => Promise<unknown>;
+  suggestions?: corrections.SuggestionReader;
+  search?: string;
+  write?: (request: {
+    functionName: string;
+    address: string;
+    args: unknown[];
+  }) => Promise<string>;
 }) {
   const storage = options.storage ?? new Map<string, string>();
   const slots: unknown[] = [];
@@ -103,6 +111,7 @@ export function workspaceHarness(options: {
     'lucide-react': ui,
     '@/lib/protocol': protocol,
     '@/lib/recovery': recovery,
+    '@/lib/corrections': corrections,
     '@/lib/deployment': { DEPLOYMENT },
     '@/lib/feedback': { RequestFeedback: 'RequestFeedback' },
     '@/lib/webmcp': { registerTranslationTools: () => () => {} },
@@ -118,6 +127,9 @@ export function workspaceHarness(options: {
     '@/lib/chain': {
       configured: true,
       contractAddress: DEPLOYMENT.address,
+      correctionsConfigured: true,
+      correctionsAddress: '0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e',
+      readSuggestion: options.suggestions ?? (async () => ({ found: false })),
       explorer: 'https://explorer-studio.genlayer.com',
       ExecutionError: class extends Error {},
       read: (name: keyof protocol.ViewSpec, args: unknown[]) =>
@@ -130,8 +142,13 @@ export function workspaceHarness(options: {
           throw new Error('Transaction not found');
         }),
       writer: () => ({
-        writeContract: async () => {
+        writeContract: async (request: {
+          functionName: string;
+          address: string;
+          args: unknown[];
+        }) => {
           writes++;
+          if (options.write) return options.write(request);
           throw new Error('No transaction should be sent in recovery tests');
         },
       }),
@@ -172,7 +189,7 @@ export function workspaceHarness(options: {
         console,
         window: {
           history: { replaceState() {} },
-          location: { pathname: '/', search: '' },
+          location: { pathname: '/', search: options.search ?? '' },
         },
       },
       { filename: file },
@@ -235,6 +252,16 @@ export function workspaceHarness(options: {
     writes: () => writes,
     feedback: () =>
       all().find((node) => node.type === 'RequestFeedback')!.props,
+    edit: (id: string, value: string) => {
+      const node = all().find(
+        (node) => node.props.id === id && node.type === 'textarea',
+      );
+      if (!node || node.props.disabled)
+        throw new Error('Editor is unavailable: ' + id);
+      (node.props.onChange as (e: { target: { value: string } }) => void)({
+        target: { value },
+      });
+    },
     closeConfirmation: () =>
       (
         all().find((node) => node.type === 'AlertDialog')!.props

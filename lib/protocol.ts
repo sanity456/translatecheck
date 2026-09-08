@@ -64,13 +64,15 @@ export type ViewSpec = {
 };
 export type Pending = {
   hash: `0x${string}`;
-  action: 'assess' | 'publish';
+  action: 'assess' | 'publish' | 'suggest';
   id: string;
   source: string;
   translation: string;
   target: Language;
   // Older saved transactions do not have this field. Never guess their sender.
   account?: `0x${string}`;
+  revisionParentId?: string;
+  revisionDraft?: string;
 };
 export const LABELS: Record<Verdict, string> = {
   PRESERVED: 'Meaning preserved',

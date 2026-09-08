@@ -7,6 +7,7 @@ import {
   type Publication,
   type ViewSpec,
 } from './protocol.ts';
+import { validateComparison } from './corrections.ts';
 
 export type FinalizedReader = <K extends keyof ViewSpec>(
   name: K,
@@ -20,6 +21,7 @@ export type RecoveryResult =
       gate: Gate;
       publication: Publication;
       completed: boolean;
+      revisionParent?: Assessment;
     }
   | { kind: 'unknown' };
 
@@ -33,6 +35,7 @@ export async function reconcilePending(
   const unknown: RecoveryResult = { kind: 'unknown' };
   let timer: ReturnType<typeof setTimeout> | undefined;
   async function inspect(): Promise<RecoveryResult> {
+    if (pending.action === 'suggest') return unknown;
     if (
       (await contentId(pending.source, pending.translation, pending.target)) !==
       pending.id
@@ -56,6 +59,17 @@ export async function reconcilePending(
     ]);
     if (gate.assessment_id !== pending.id || gate.policy !== POLICY)
       return unknown;
+    let revisionParent: Assessment | undefined;
+    if (
+      pending.revisionParentId &&
+      /^[0-9a-f]{64}$/.test(pending.revisionParentId)
+    ) {
+      const previous = await read('get_assessment', [pending.revisionParentId]);
+      if (previous.found) {
+        await validateComparison(previous, assessment);
+        revisionParent = previous;
+      }
+    }
     let publication: Publication = { found: false };
     if (
       pending.action === 'publish' &&
@@ -77,6 +91,7 @@ export async function reconcilePending(
       gate,
       publication,
       completed: pending.action === 'assess' || publication.found,
+      ...(revisionParent ? { revisionParent } : {}),
     };
   }
   try {
