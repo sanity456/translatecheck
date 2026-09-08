@@ -122,3 +122,17 @@ actual OKX/Phantom compatibility remain unverified. Unit tests do not prove thos
 interactions. Public access and hosted CI must be verified before submission.
 
 See `ARCHITECTURE.md` and `SECURITY.md` for boundaries.
+
+## Hosting
+
+Vercel hosting is configured for the personal `sanity456` account in workspace
+`sanity3`: [TranslateCheck project](https://vercel.com/sanity3/translatecheck).
+Use an authenticated **preview** deployment while the app is private. The GitHub
+repository remains private, and automatic Git-connected Vercel deployments are
+not enabled. Do not promote to production until public launch is approved.
+
+The existing [Sites version](https://translatecheck.blazekingsley2.chatgpt.site)
+and `.openai/hosting.json` remain intact as a private backup. The host change
+does not redeploy contracts or move chain records. Reconnect your wallet on the
+new origin; browser-local drafts and pending-transaction tracking remain on the
+origin where they were created. See [Vercel hosting notes](docs/vercel-hosting.md).

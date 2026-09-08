@@ -1,0 +1,23 @@
+# Upload only the static app's build inputs, never wallet tooling or local caches.
+/*
+!app
+!components
+!hooks
+!lib
+!public
+!index.html
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.ts
+!vercel.json
+!.vercelignore
+
+# Also exclude sensitive/local files if added inside an allowed source directory.
+**/.env*
+**/*.keystore
+**/*.pem
+**/node_modules/
+**/__pycache__/
+**/*.pyc
+**/*.tsbuildinfo
