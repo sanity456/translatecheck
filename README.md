@@ -127,9 +127,11 @@ See `ARCHITECTURE.md` and `SECURITY.md` for boundaries.
 
 Vercel hosting is configured for the personal `sanity456` account in workspace
 `sanity3`: [TranslateCheck project](https://vercel.com/sanity3/translatecheck).
-Use an authenticated **preview** deployment while the app is private. The GitHub
+Open the [private Vercel version](https://translatecheck-8ikcrck4f-sanity3.vercel.app)
+while signed into the owner account. It is an unaliased deployment protected by
+Vercel Authentication, not a public production-domain launch. The GitHub
 repository remains private, and automatic Git-connected Vercel deployments are
-not enabled. Do not promote to production until public launch is approved.
+not enabled. Do not assign a public domain until public launch is approved.
 
 The existing [Sites version](https://translatecheck.blazekingsley2.chatgpt.site)
 and `.openai/hosting.json` remain intact as a private backup. The host change

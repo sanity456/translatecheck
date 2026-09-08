@@ -8,12 +8,14 @@
 - Hobby plan; no paid upgrade or add-on was enabled.
 - Vercel Authentication is enabled with
   `ssoProtection.deploymentType = prod_deployment_urls_and_all_previews`.
-- Deploy explicitly to **preview**, not production, while privacy is required.
+- Use only the authenticated, unaliased deployment URL while privacy is required.
+  A preview flag alone did not preserve the requested target on the first upload;
+  see the verified migration outcome below.
 - There is no connected Git integration or automatic production deployment.
   The source remains in the private `sanity456/translatecheck` GitHub repository.
 
 [Vercel's Hobby protection](https://vercel.com/docs/deployment-protection)
-protects preview deployments, but not the production domain. A private preview
+protects preview and generated deployment URLs, but not the production domain. A private deployment
 is not a public hackathon submission link. Obtain approval before a public
 production launch or before connecting automatic Git deployments.
 
@@ -37,16 +39,62 @@ npm run typecheck
 npm test
 npm run build
 vercel deploy --dry --json --target preview --scope sanity3 --project prj_HX3OBG4TceiYqG1LWl9TgRfYOXU9
-vercel deploy --target preview --scope sanity3 --project prj_HX3OBG4TceiYqG1LWl9TgRfYOXU9
 ```
 
 Before uploading, inspect the dry-run files and verify that the project still
-has Vercel Authentication enabled. After deploying, verify READY status, a
-non-production target, and that an unauthenticated HTTP request is denied or
-redirected to Vercel login. Never upload environment files or paste protection
+has Vercel Authentication enabled. The dry run uploads nothing. Do not assume
+`--target preview` can safely bootstrap a private project: this migration found
+that Vercel coerced its first deployment to production. Do not use `staging`
+as a workaround; it also created an alias. Future private deployments must avoid
+automatic alias assignment and verify every actual alias and public project
+domain, not merely the target label. After deploying, verify READY status and
+that an unauthenticated HTTP request is denied or redirected to Vercel login.
+Never upload environment files or paste protection
 bypass credentials into evidence or links. The local `.vercel` link stays
 ignored by Git. CLI linking may create an ignored `.env.local` containing an
 OIDC token; the app does not need that file.
+
+## Verified migration outcome — 2026-09-08
+
+- [Private deployed app](https://translatecheck-8ikcrck4f-sanity3.vercel.app).
+- [Deployment dashboard](https://vercel.com/sanity3/translatecheck/5EG463z5wG3EVBsnn9VNz1Pni21v).
+- Deployment ID: `dpl_5EG463z5wG3EVBsnn9VNz1Pni21v`; status: `READY`.
+- Exact uploaded source: `170820bf17efc95500f1700fb6826cb79a4d6664`.
+  Subsequent migration-note changes are outside the Vercel upload allowlist.
+- Actual target metadata: `production` because Vercel promoted the first
+  deployment target automatically. This deployment is **not aliased to a public
+  address**. Its aliases list is empty and the project has no current production
+  deployment target. Do not describe it as a verified preview-target deployment.
+- Anonymous request to its generated URL returned HTTP 302 to authentication.
+  Both `translatecheck.vercel.app` and the removed
+  `translatecheck-sanity3.vercel.app` alias returned HTTP 404.
+- One confirmed workspace member: `sanity456` (OWNER). No Git integration or
+  sharing/bypass links were enabled. GitHub and the original Sites deployment
+  remained private.
+- Local lint, typecheck, 65 frontend tests, and the Vite build passed.
+  [CI for the uploaded source](https://github.com/sanity456/translatecheck/actions/runs/34226783451)
+  passed all three jobs: app, Linux contracts, Windows contracts (126 distinct
+  frontend/contract tests; the contract suite runs twice).
+- Vercel's remote build passed: 2,493 modules transformed, static Vite output
+  produced. The existing large-chunk warning is non-blocking.
+- No new wallet transaction or browser signing test was performed.
+
+### Temporary-public-alias incident
+
+The initial CLI upload requested `--target preview`, but Vercel returned
+`target: production`. That deployment
+(`dpl_ASFAANivjSDApYB4UbMG7dBktjV1`) was removed immediately after the unexpected
+target was observed. The source remains recoverable from GitHub.
+
+A subsequent explicit `staging` API request with
+`autoAssignCustomDomains: false` was also coerced to production. The service
+still assigned the staging alias `translatecheck-sanity3.vercel.app`, which
+returned HTTP 200 without authentication. That alias was removed as soon as
+the HTTP check identified it. Its deletion was verified by an empty deployment
+alias list and HTTP 404. Only the authenticated generated deployment URL was
+retained. The user was informed; do not claim that the migration had no temporary
+public exposure. No private wallet keys, environment files, caches, or test
+tooling were in the upload. No visitor-access audit was performed.
 
 ## What stays unchanged
 
