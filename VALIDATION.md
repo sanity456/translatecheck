@@ -30,9 +30,11 @@ contract was unchanged. Exact source and finalized state were rechecked.
 The SDK's correct final-state selector is `TransactionHashVariant.LATEST_FINAL`;
 the obsolete `stateStatus` argument is not used in the app or verification script.
 
-## Still required before submission
+## Submission checks
 
-A passing hosted Linux/Windows CI run and publicly accessible submission links.
+Require a passing hosted Linux/Windows CI run and publicly accessible submission
+links. Check the actual [GitHub Actions results](https://github.com/sanity456/translatecheck/actions)
+for the submitted revision; a local test pass is not a hosted CI result.
 Real mobile-device wallet testing and other-wallet compatibility have not been
 verified. Do not describe MetaMask results as universal wallet support.
 
@@ -62,3 +64,9 @@ contains the universal archive. The contract continues to select its exact
 `py-genlayer` runner by the unchanged header hash; no policy assertion is removed
 or mocked to bypass the failure. The matrix now runs both operating systems to
 completion even if one fails.
+
+After the archive pin, Linux passed all 32 contract tests. Windows then failed
+while printing the linter's Unicode checkmark to its CP1252 console, before
+reaching the tests. The contract job now explicitly uses `PYTHONUTF8=1` and
+`PYTHONIOENCODING=utf-8` on both systems. This changes tooling encoding, not
+contract execution or test assertions.

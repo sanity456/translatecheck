@@ -74,6 +74,11 @@ correct. Initial browser checks used revision
 `dd699c754795c51120217841fea5c60ca5e3cc4f`; the feedback-only correction follows
 that revision and has dedicated rendering regression coverage.
 
+Responsive smoke checks used 390 × 844 and 1280 × 900 browser viewports. The
+document fit the available width without horizontal overflow at those sizes;
+the phone-sized editor stacked correctly. The normal viewport was restored.
+These checks do not substitute for testing a physical phone and mobile wallet.
+
 The exact source hash and structured results are in
 `deployments/browser-wallet-test.json`. Public access and a passing hosted CI
 run are separate submission requirements; local test passes are not hosted CI.

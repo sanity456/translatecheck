@@ -58,8 +58,10 @@ Consensus can be wrong, and StudioNet can be rate-limited or reset.
 
 Direct tests mock model results. Captured-validator tests additionally exercise
 independent agreement/disagreement. The live smoke uses real GenVM validators
-and asserts execution success, not merely transaction status. CI is supplied for
-Linux and Windows but is not evidence of a hosted run until pushed and passing.
+and asserts execution success, not merely transaction status.
+[GitHub Actions](https://github.com/sanity456/translatecheck/actions) runs the
+contract checks on Linux and Windows and checks the app separately. Verify all
+three jobs for the submitted revision; local test passes do not establish CI.
 Actual Chrome/MetaMask signing, assessment, publication, cancellation, reconnect,
 and interrupted-transaction recovery were verified. See `BROWSER_TEST_REPORT.md`
 and `deployments/browser-wallet-test.json`. Mobile-device wallet testing and
