@@ -9,9 +9,9 @@
     "dev": "vite",
     "build": "vite build",
     "start": "vite preview",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/frontend.test.ts tests/recovery.test.ts tests/workspace.test.ts tests/corrections.test.ts tests/revisions.test.ts",
+    "test": "node --test tests/frontend.test.ts tests/recovery.test.ts tests/workspace.test.ts tests/corrections.test.ts tests/revisions.test.ts tests/ui-primitives.test.ts tests/evidence.test.ts",
     "format": "oxfmt"
   },
   "dependencies": {

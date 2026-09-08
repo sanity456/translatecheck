@@ -56,6 +56,7 @@ genvm-lint check contracts/translatecheck_corrections.py
 genvm-lint typecheck contracts/translatecheck_corrections.py
 python -m pytest tests/direct -q
 npm run typecheck
+npm run lint
 npm test
 npm run build
 node scripts/verify-deployment.mjs
@@ -72,10 +73,14 @@ are in `lib/deployment.ts`.
 `node scripts/corrections-smoke.mjs` deploys a NEW correction companion and writes
 public correction/recheck fixtures against the configured checker. Use `--resume`
 only to continue its saved report, not to reroll suggestions or deploy again.
-Do not run either smoke script merely to inspect the app. The new correction flow
-has live three-language contract coverage and isolated UI-handler tests, but no
-new browser-extension signing test. Earlier MetaMask E2E evidence below applies
-to the earlier assessment/publication flow, not this newly added interaction.
+Do not run either smoke script merely to inspect the app. The correction flow
+has live three-language contract coverage, isolated UI-handler tests, and a
+completed Chrome/MetaMask browser signing test on StudioNet. Its three fresh
+user-approved transactions covered assessment, native correction, and a separate
+recheck. The original stayed blocked; reload and edit-invalidation checks passed.
+See [the Fix & Recheck browser report](docs/fix-recheck-browser-test.md) and its
+[structured evidence](deployments/fix-recheck-browser-test.json). This evidence
+identifies the exact tested revision and does not claim other-wallet coverage.
 
 ## Recover a stuck transaction
 
@@ -107,7 +112,8 @@ Direct tests mock model results. Captured-validator tests additionally exercise
 independent agreement/disagreement. The live smoke uses real GenVM validators
 and asserts execution success, not merely transaction status.
 [GitHub Actions](https://github.com/sanity456/translatecheck/actions) runs the
-contract checks on Linux and Windows and checks the app separately. Verify all
+contract checks on Linux and Windows and runs full-repository lint, app type
+checking, tests, and the build separately. Verify all
 three jobs for the submitted revision; local test passes do not establish CI.
 Actual Chrome/MetaMask signing, assessment, publication, cancellation, reconnect,
 and interrupted-transaction recovery were verified. See `BROWSER_TEST_REPORT.md`

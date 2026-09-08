@@ -3,6 +3,20 @@
 Tested on 2026-09-08 UTC with Chrome, MetaMask, and GenLayer StudioNet (61999).
 The app was owner-private during testing. No tokens were transferred.
 
+## Fix & Recheck browser verification
+
+The later Fix & Recheck release was tested separately in Chrome with MetaMask
+on revision `1f9853c11215aaae6a2a5a2383a0a10c41af4eec`. All three fresh
+user-approved transactions finalized with successful execution. The incorrect
+11 h translation stayed blocked, the advisory draft restored 10 h, and a
+separate assessment cleared only the exact revised text. Reload and edit
+invalidation passed. No publication was submitted by this test.
+
+See [the complete report](docs/fix-recheck-browser-test.md) and
+[its machine-readable record](deployments/fix-recheck-browser-test.json).
+The assessment/publication and cancellation evidence below is retained from
+the earlier release; it is not being relabeled as coverage of the new flow.
+
 ## Verified flow
 
 - The wallet button opened the chooser and detected MetaMask.

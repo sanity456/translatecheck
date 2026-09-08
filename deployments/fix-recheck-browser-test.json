@@ -1,0 +1,147 @@
+{
+  "sourceSha": "1f9853c11215aaae6a2a5a2383a0a10c41af4eec",
+  "startedAt": "2026-09-08T09:28:11.315Z",
+  "network": "studionet",
+  "app": "https://translatecheck.blazekingsley2.chatgpt.site",
+  "browser": "Chrome",
+  "wallet": "MetaMask",
+  "checks": [
+    "failed original displayed blocked",
+    "Fix & recheck opens editor",
+    "existing suggestion reused without wallet prompt",
+    "unchanged revision cannot be rechecked",
+    "suggestion remains advisory before adoption",
+    "adoption copies text but does not approve or submit",
+    "Recheck independently restores existing finalized assessment without wallet",
+    "both assessment links remain visible",
+    "editing the checked revision removes approval",
+    "comparison link reload restores both finalized results",
+    "MetaMask connection succeeded through chooser",
+    "fresh user-signed assessment finalized successfully; wrong time detected as CHANGED / NUMBER_OR_DATE and publication blocked",
+    "fresh failed record opens comparison with unchanged revision disabled; correction request reaches selected-wallet approval without auto-adopting or publishing",
+    "fresh user-signed correction finalized successfully with advisory_only and requires_separate_assessment true; original editor remained unchanged until explicit adoption",
+    "Use suggestion explicitly adopted fresh draft without submitting a transaction; finalized checker state proves draft unassessed and publication blocked; publication count unchanged at 2",
+    "Recheck revision reached separate MetaMask approval while revised result remained unassessed and publication blocked",
+    "fresh user-signed revision finalized with successful execution and PRESERVED / NONE; finalized gate satisfied only for exact corrected text",
+    "original assessment unchanged and gate still MEANING_CHANGED; assessment count rose by exactly 2 and publication count remained 2",
+    "fresh comparison link reload restored both finalized records without connecting a wallet",
+    "editing the fresh approved revision from 10 h to 12 h immediately removed its assessment, approval, verified-comparison link and Publish action; original failed record remained visible",
+    "after the edit test, reloading the verified comparison restored correct 10 h text and both finalized assessments with no pending transaction or wallet connection required"
+  ],
+  "fixture": {
+    "source": "Test announcement: the workshop starts at 10 am on 20 October 2026.",
+    "translation": "Annonce test : l’atelier commence à 11 h le 20 octobre 2026.",
+    "target": "fr",
+    "id": "d8c832460455662c0616186e8140fd2d232ecafaa8b5b617959059b29920e67b",
+    "initiallyFound": false
+  },
+  "transactions": [
+    {
+      "action": "assess",
+      "hash": "0xaa920bbc0120f39f0743131a83c6c7511c122624698d91f5ce0750fd6d6f5ab9",
+      "status": "FINALIZED",
+      "verified": true,
+      "executionSuccess": true,
+      "assessmentId": "d8c832460455662c0616186e8140fd2d232ecafaa8b5b617959059b29920e67b",
+      "verdict": "CHANGED",
+      "reasonCode": "NUMBER_OR_DATE",
+      "policySatisfied": false,
+      "failureReasons": [
+        "MEANING_CHANGED"
+      ],
+      "createdAt": "2026-09-08T09:31:39.317593Z"
+    },
+    {
+      "action": "suggest",
+      "hash": "0x2bef560bf2c358404256e455c14e6e67c941efd65d4948a41c49c1d03ee38b4e",
+      "status": "FINALIZED",
+      "verified": true,
+      "executionSuccess": true,
+      "createdAt": "2026-09-08T09:37:58.079976Z",
+      "parentId": "d8c832460455662c0616186e8140fd2d232ecafaa8b5b617959059b29920e67b",
+      "suggestionStatus": "SUGGESTED",
+      "advisoryOnly": true,
+      "requiresSeparateAssessment": true
+    },
+    {
+      "action": "recheck",
+      "hash": "0x0df9500599f60937a497c8d9ccebb2535c841a31103966d55dd670fde9114a28",
+      "status": "FINALIZED",
+      "verified": true,
+      "executionSuccess": true,
+      "assessmentId": "c6931376809f0f4042492532d98d971c6fee09ea8d7b3e1267787f5716dbd98d",
+      "verdict": "PRESERVED",
+      "reasonCode": "NONE",
+      "policySatisfied": true,
+      "failureReasons": [],
+      "createdAt": "2026-09-08T09:40:28.701422Z"
+    }
+  ],
+  "completed": true,
+  "baselineCounts": {
+    "assessments": 7,
+    "publications": 2
+  },
+  "walletAddress": "0x29b8b7d7cbf534eba01e56919de19d79d1509360",
+  "awaiting": null,
+  "suggestion": {
+    "translation": "Annonce test : l’atelier commence à 10 h le 20 octobre 2026.",
+    "explanation": "The previous translation incorrectly changed the start time from 10 am to 11 h. I have corrected the time to 10 h to accurately reflect the source text."
+  },
+  "revision": {
+    "source": "Test announcement: the workshop starts at 10 am on 20 October 2026.",
+    "translation": "Annonce test : l’atelier commence à 10 h le 20 octobre 2026.",
+    "target": "fr",
+    "id": "c6931376809f0f4042492532d98d971c6fee09ea8d7b3e1267787f5716dbd98d",
+    "initiallyFound": false,
+    "initialPolicySatisfied": false,
+    "initialFailureReasons": [
+      "ASSESSMENT_NOT_FOUND"
+    ],
+    "policySatisfied": true,
+    "verdict": "PRESERVED",
+    "reasonCode": "NONE",
+    "explanation": "The translation accurately conveys the event, time, and date without any material changes or omissions."
+  },
+  "preRecheckCounts": {
+    "assessments": 8,
+    "publications": 2
+  },
+  "finalCounts": {
+    "assessments": 9,
+    "publications": 2
+  },
+  "chainVerifiedAt": "2026-09-08T09:42:12.973Z",
+  "originalUnchanged": true,
+  "originalPolicySatisfied": false,
+  "comparisonUrl": "https://translatecheck.blazekingsley2.chatgpt.site/?assessment=c6931376809f0f4042492532d98d971c6fee09ea8d7b3e1267787f5716dbd98d&compare=d8c832460455662c0616186e8140fd2d232ecafaa8b5b617959059b29920e67b",
+  "editInvalidationTest": {
+    "translation": "Annonce test : l’atelier commence à 12 h le 20 octobre 2026.",
+    "submitted": false,
+    "approvalRemoved": true,
+    "publishActionRemoved": true
+  },
+  "completedAt": "2026-09-08T09:45:22.826Z",
+  "contracts": {
+    "checker": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+    "checkerSourceSha256": "d1822ee1ecb294382228f3343ea39cd322e717b45d859c78ef5d9e3c0fdbc28d",
+    "corrections": "0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e",
+    "correctionsSourceSha256": "a927245bef02f7c52c719b4be898729aed1eb94932010d28e65f32b5112b4acc"
+  },
+  "testScope": {
+    "journey": "Fix & Recheck: assess -> suggest -> explicit adoption -> independent recheck -> reload -> edit invalidation",
+    "realWallet": "Chrome / MetaMask",
+    "freshTransactionLanguage": "fr",
+    "freshTransactions": 3,
+    "publicationSubmitted": false,
+    "codeChanged": false,
+    "visibilityChanged": false,
+    "limitations": [
+      "This is evidence for the tested Chrome/MetaMask journey, not all devices or wallets.",
+      "No physical mobile wallet, actual OKX signing or Phantom signing was tested.",
+      "This run did not benchmark general translation accuracy or rerun the full automated suite.",
+      "The revised translation was eligible for publication but was deliberately not published.",
+      "No application source, deployment, GitHub repository, network configuration or access policy was changed by this browser test."
+    ]
+  }
+}

@@ -9,8 +9,10 @@ Verification records: 2026-09-08 UTC.
   truthy strings/numbers in place of a boolean, malformed leader output and errors.
   These are mocked tests, not an accuracy benchmark. Cross-contract reads are
   stubbed in direct mode; the live test below exercises the actual call.
-- 49 frontend tests pass. Coverage includes correction binding to the exact original, advisory
-  flags, malformed/unchanged drafts, Unicode quote highlighting, validated
+- 60 frontend tests pass: 49 feature regressions plus 11 evidence/shared-UI
+  regressions added during review maintenance. Feature coverage includes
+  correction binding to the exact original, advisory flags, malformed/unchanged
+  drafts, Unicode quote highlighting, validated
   before/after links, cancellation, bounded recovery, and no automatic writes.
   Actual Workspace handlers verify adoption cannot approve, edits invalidate an
   approval, revisions call the checker separately, and existing results are reused.
@@ -25,10 +27,43 @@ Verification records: 2026-09-08 UTC.
   `deployments/corrections-studionet.json` for transaction hashes, texts and gates.
 - The original checker address, meaning policy and source are unchanged. There
   is no Bradbury migration. Site and repository access remain private.
-- These new UI tests are isolated handler tests, not browser E2E. A fresh browser
-  and wallet-extension signing walkthrough of Request correction → Use suggestion
-  → Recheck revision remains unverified. Earlier browser evidence does not cover
-  this new feature. Hosted CI must be checked separately for the release commit.
+- The isolated UI-handler tests are distinct from the subsequently completed
+  Chrome/MetaMask browser E2E on revision
+  `1f9853c11215aaae6a2a5a2383a0a10c41af4eec`. Three fresh user-approved StudioNet
+  transactions finalized with successful execution: failed original assessment,
+  advisory correction, and independent revised assessment. Finalized reads
+  confirmed the original remained blocked, the exact revision passed, and no
+  publication was created. Reload restored both results; editing cleared approval.
+  See [the browser report](docs/fix-recheck-browser-test.md) and
+  [structured evidence](deployments/fix-recheck-browser-test.json). This does not
+  establish mobile-device or other-wallet compatibility. Hosted CI remains a
+  separate check for each submitted revision.
+
+## Evidence and full-lint maintenance
+
+The completed Fix & Recheck browser record is now versioned in the repository,
+with its original timestamps, tested source revision, exact inputs, transaction
+links, and before/after policy results. README and browser/validation reports
+link this evidence instead of describing the flow as unverified. Recording it
+does not turn it into a new browser run against the later maintenance revision.
+
+The full `npm run lint` command passes with `oxlint --deny-warnings`, and CI runs
+it before TypeScript, frontend tests, and the production build. The global lint
+configuration and scan scope were not weakened. Fixes cover native group/status
+semantics, label/link contents, explicit chart key conversion, and subscription
+state/cleanup in the mobile and carousel helpers. One documented, line-scoped
+accessibility exception preserves the input addon's pointer-only focus shortcut;
+the actual input and nested buttons remain the native keyboard targets.
+
+Eight regressions exercise the changed UI helpers and subscription cleanup;
+three bind the evidence to exact text commitments, deployed contract metadata,
+and the documented CI command. Together with the unchanged contract suite this
+is 60 frontend tests and 61 direct contract tests (121 distinct tests). These
+isolated checks are separate from the recorded real-wallet browser test. No
+contract source, address, wallet submission logic, network, or access policy was
+changed by this maintenance.
+
+## Earlier release records
 
 The records below describe earlier releases and are retained as history.
 
