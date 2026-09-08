@@ -115,6 +115,7 @@ export function workspaceHarness(options: {
     '@/lib/deployment': { DEPLOYMENT },
     '@/lib/feedback': { RequestFeedback: 'RequestFeedback' },
     '@/app/gold-stream': { GoldStream: 'GoldStream' },
+    '@/app/brand': { Brand: 'Brand', Mascot: 'Mascot' },
     '@/lib/webmcp': { registerTranslationTools: () => () => {} },
     '@/lib/wallet': {
       ...wallet,

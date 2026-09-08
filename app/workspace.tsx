@@ -9,7 +9,6 @@ import {
 import { flushSync } from 'react-dom';
 import {
   ArrowRight,
-  Languages,
   ShieldCheck,
   Wallet,
   LockKeyhole,
@@ -91,6 +90,7 @@ import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
 import { RequestFeedback } from '@/lib/feedback';
 import { GoldStream } from '@/app/gold-stream';
+import { Brand, Mascot } from '@/app/brand';
 import { reconcilePending } from '@/lib/recovery';
 import {
   checkedSuggestion,
@@ -738,14 +738,7 @@ export default function Workspace() {
     <>
       <header className="site-header">
         <div className="header-inner">
-          <div className="brand">
-            <span className="brand-icon">
-              <Languages size={22} />
-            </span>
-            <span className="brand-wordmark">
-              Translate<span>Check</span>
-            </span>
-          </div>
+          <Brand />
           <div className="header-actions">
             <span className="network">StudioNet · test network</span>
             <button
@@ -764,7 +757,7 @@ export default function Workspace() {
       </header>
       <main className="shell">
         <div className="topline">
-          <div>
+          <div className="intro-copy">
             <div className="eyebrow">A second look at the meaning</div>
             <h1>
               Good words. <span>Same message?</span>
@@ -773,7 +766,10 @@ export default function Workspace() {
               Check your translation before it goes out into the world.
             </p>
           </div>
-          <span className="language-scope">EN → FR / ES / 中文</span>
+          <div className="intro-brand">
+            <Mascot />
+            <span className="language-scope">EN → FR / ES / 中文</span>
+          </div>
         </div>
         <RequestFeedback error={error} notice={notice} />
         {pending && (

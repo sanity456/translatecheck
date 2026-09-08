@@ -9,8 +9,8 @@ Verification records: 2026-09-08 UTC.
   truthy strings/numbers in place of a boolean, malformed leader output and errors.
   These are mocked tests, not an accuracy benchmark. Cross-contract reads are
   stubbed in direct mode; the live test below exercises the actual call.
-- 63 frontend tests pass: 49 feature regressions plus 14 evidence/shared-UI
-  regressions added during review maintenance and the gold-background update.
+- 65 frontend tests pass: 49 feature regressions plus 16 evidence/shared-UI
+  regressions added during review maintenance, background, and branding updates.
   Feature coverage includes
   correction binding to the exact original, advisory flags, malformed/unchanged
   drafts, Unicode quote highlighting, validated
@@ -70,8 +70,8 @@ changed by this maintenance.
 The background is now a local dark-gold stream texture with a slow animation,
 dark readable panels, a native pause/resume button, reduced-motion support, and
 forced-colors fallback. Three additional regressions cover its handler, markup,
-and asset/CSS accessibility guards. This brings the frontend suite to 63 tests;
-with the unchanged 61 direct contract tests, there are 124 distinct tests.
+and asset/CSS accessibility guards. That update brought the frontend suite to 63
+tests; with the unchanged 61 direct contract tests, there were 124 distinct tests.
 Asset provenance and the exact generation prompt are recorded in
 [the background notes](docs/gold-stream-background.md).
 
@@ -79,6 +79,22 @@ This is a presentation-only change. No new browser or mobile-wallet signing test
 is claimed; previous browser evidence stays tied to its recorded source revision.
 Full lint, TypeScript, frontend tests, and the production build must pass for this
 revision, along with the existing hosted Linux/Windows contract jobs.
+
+## Owl logo and mascot update
+
+The header uses an owl emblem with a real-text wordmark. The same emblem is the
+favicon, and a static full-body mascot appears beside the introduction, never in
+assessment results. Both local transparent PNGs have reserved display dimensions.
+Two isolated regressions cover the actual branding markup and packaged asset
+metadata, bringing the frontend suite to 65 tests (126 distinct tests including
+the unchanged 61 direct contract tests). These are not browser or mobile tests.
+
+The Vite static app has no Next.js image-optimization endpoint. Two documented,
+line-scoped `nextjs/no-img-element` exceptions permit native images with explicit
+dimensions; global lint rules, test assertions, and dependency versions are
+unchanged. Full lint, TypeScript, tests, and the production build still run.
+See [asset provenance and prompts](docs/brand-assets.md). No wallet/contract logic,
+deployment address, network, or access policy changed.
 
 ## Earlier release records
 

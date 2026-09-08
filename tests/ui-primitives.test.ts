@@ -382,3 +382,35 @@ void test('gold stream ships its local texture and honors pause, reduced motion 
     /\.gold-stream-backdrop,\s*\.background-motion \{\s*display: none/,
   );
 });
+
+void test('brand artwork keeps the wordmark as text and the mascot separate from controls and verdicts', () => {
+  const brand = markup('app/brand.tsx', 'Brand');
+  assert.match(brand, /src="\/brand\/translatecheck-logo\.png"/);
+  assert.match(brand, /alt=""[^>]*width="56"[^>]*height="56"/);
+  assert.match(brand, /Translate<span>Check<\/span>/);
+  const mascot = markup('app/brand.tsx', 'Mascot');
+  assert.match(mascot, /src="\/brand\/translatecheck-mascot\.png"/);
+  assert.match(mascot, /alt="TranslateCheck’s gold owl mascot"/);
+  assert.match(mascot, /width="104"[^>]*height="104"/);
+  assert.doesNotMatch(brand + mascot, /<button|<a\s|role="status"|aria-live/);
+});
+
+void test('both brand images ship locally as square PNGs with alpha support', () => {
+  for (const name of ['translatecheck-logo', 'translatecheck-mascot']) {
+    const bytes = readFileSync(resolve(root, `public/brand/${name}.png`));
+    assert.deepEqual(
+      Array.from(bytes.subarray(0, 8)),
+      [137, 80, 78, 71, 13, 10, 26, 10],
+    );
+    const header = new DataView(
+      bytes.buffer,
+      bytes.byteOffset,
+      bytes.byteLength,
+    );
+    const width = header.getUint32(16);
+    const height = header.getUint32(20);
+    assert.equal(width, height);
+    assert.ok(width >= 512);
+    assert.ok([4, 6].includes(bytes[25]), 'PNG must retain its alpha channel');
+  }
+});
