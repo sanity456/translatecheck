@@ -36,6 +36,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -75,8 +85,18 @@ import {
 import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
 import { RequestFeedback } from '@/lib/feedback';
+import { reconcilePending } from '@/lib/recovery';
 
 const PENDING_KEY = 'translatecheck:pending:61999:' + DEPLOYMENT.address;
+const STOPPED_KEY = PENDING_KEY + ':last-stopped';
+function recoverStoppedHash(): string | null {
+  try {
+    const hash = localStorage.getItem(STOPPED_KEY);
+    return hash && /^0x[0-9a-fA-F]{64}$/.test(hash) ? hash : null;
+  } catch {
+    return null;
+  }
+}
 function recoverPending(): Pending | null {
   try {
     const p = JSON.parse(localStorage.getItem(PENDING_KEY) || 'null');
@@ -119,6 +139,8 @@ export default function Workspace() {
   const [walletOpen, setWalletOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState<Pending | null>(recoverPending);
+  const [stopOpen, setStopOpen] = useState(false);
+  const [lastStoppedHash, setLastStoppedHash] = useState(recoverStoppedHash);
   const [notice, setNotice] = useState(
     pending
       ? 'A submitted transaction was found. Resume tracking below; no new approval is needed.'
@@ -365,6 +387,51 @@ export default function Workspace() {
       setBusy(false);
     }
   }
+  async function stopTracking() {
+    if (!pending || busyRef.current) return;
+    const saved = pending;
+    busyRef.current = true;
+    setBusy(true);
+    setStopOpen(false);
+    tracking.current?.abort();
+    try {
+      clearResult();
+      setNotice('Checking finalized records before stopping local tracking…');
+      // Bounded and read-only: an unavailable network must not trap the user here.
+      const result = await reconcilePending(saved, read);
+      setLastStoppedHash(saved.hash);
+      try {
+        localStorage.setItem(STOPPED_KEY, saved.hash);
+      } catch {
+        /* The original link remains visible in this session. */
+      }
+      savePending(null);
+      setTxStatus('');
+      if (result.kind === 'found') {
+        setSource(result.assessment.source);
+        setTranslation(result.assessment.translation);
+        setTarget(result.assessment.target);
+        setAssessment(result.assessment);
+        setGate(result.gate);
+        setPublication(result.publication);
+        setTab('check');
+        window.history.replaceState(null, '', '?assessment=' + saved.id);
+      }
+      setNotice(
+        result.kind === 'found' && result.completed
+          ? saved.action === 'publish'
+            ? 'Tracking stopped. The submitting wallet’s publication is already in finalized chain state. No transaction was sent.'
+            : 'Tracking stopped. An assessment for the exact saved text is finalized and loaded below. This does not confirm the original transaction’s status.'
+          : 'Local tracking stopped. The transaction’s outcome is still unconfirmed and it may finish later. Nothing was canceled or resubmitted. Check its link before retrying the same action.',
+      );
+    } catch (e) {
+      setNotice('');
+      setError(safeError(e));
+    } finally {
+      busyRef.current = false;
+      setBusy(false);
+    }
+  }
   async function connect(option: WalletOption) {
     if (busyRef.current) return;
     busyRef.current = true;
@@ -429,6 +496,17 @@ export default function Workspace() {
         );
         return;
       }
+      if (action === 'publish') {
+        const existing = await read('get_publication', [id, account]);
+        if (existing.found) {
+          await openRecord(id);
+          setPublication(existing);
+          setNotice(
+            'This wallet’s exact translation is already published. No transaction was sent.',
+          );
+          return;
+        }
+      }
       setNotice(
         'Confirm the network and transaction in your selected wallet. No tokens are transferred.',
       );
@@ -456,7 +534,15 @@ export default function Workspace() {
         value: 0n,
         leaderOnly: false,
       });
-      const p: Pending = { hash, action, id, source, translation, target };
+      const p: Pending = {
+        hash,
+        action,
+        id,
+        source,
+        translation,
+        target,
+        account,
+      };
       savePending(p);
       setTxStatus('SUBMITTED');
       await track(p);
@@ -549,8 +635,28 @@ export default function Workspace() {
                 <RefreshCw size={15} />
                 {busy ? 'Tracking…' : 'Resume transaction'}
               </button>
+              <button
+                className="secondary"
+                disabled={busy}
+                onClick={() => setStopOpen(true)}
+              >
+                Stop tracking
+              </button>
             </div>
           </div>
+        )}
+        {lastStoppedHash && (
+          <p className="footnote mb-4">
+            Last transaction you stopped tracking:{' '}
+            <a
+              href={explorer + '/tx/' + lastStoppedHash}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View transaction ↗
+            </a>{' '}
+            — stopping tracking does not cancel it.
+          </p>
         )}
         <Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
           <TabsList variant="line" className="mb-6 h-11 gap-6">
@@ -927,6 +1033,43 @@ export default function Workspace() {
           </span>
         </footer>
       </main>
+      <AlertDialog open={stopOpen} onOpenChange={setStopOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Stop tracking this transaction?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This clears this browser’s active tracking entry and lets you
+              start another check. It does not cancel the transaction: it may
+              still finish. We’ll check finalized records first, but you can
+              continue even if the network is unavailable. Nothing will be
+              automatically resubmitted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          {pending && (
+            <a
+              className="mono text-sm break-all"
+              href={explorer + '/tx/' + pending.hash}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {pending.hash} ↗
+            </a>
+          )}
+          <p className="footnote">
+            The last stopped transaction link is saved when browser storage is
+            available. Keep a copy before stopping another one.
+          </p>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={busy}>Keep tracking</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={busy}
+              onClick={() => void stopTracking()}
+            >
+              Check and stop tracking
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <Dialog open={walletOpen} onOpenChange={setWalletOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

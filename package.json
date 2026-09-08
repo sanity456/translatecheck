@@ -11,7 +11,7 @@
     "start": "vite preview",
     "lint": "oxlint",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/frontend.test.ts",
+    "test": "node --test tests/frontend.test.ts tests/recovery.test.ts tests/workspace.test.ts",
     "format": "oxfmt"
   },
   "dependencies": {

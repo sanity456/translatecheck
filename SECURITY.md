@@ -12,8 +12,11 @@
   identity certification, or legal assurance.
 - Publication is an entry in this contract's registry, not enforced publication
   on other websites. A wallet address is not a verified legal identity.
-- Browser storage holds only already-submitted transaction recovery data. Chain
-  state remains authoritative. Finalized status alone is not execution success.
+- Browser storage holds already-submitted transaction recovery data and the last
+  stopped transaction hash. Stopping local tracking does not cancel a transaction
+  or prove failure. Only matching finalized state can restore a result; RPC errors
+  and timeouts remain unknown. Chain state remains authoritative. Finalized status
+  alone is not execution success.
 - StudioNet is development infrastructure, not a production availability promise.
 - Review the matching source, dependencies, Linux/Windows CI, and real-wallet
   browser tests before public promotion or hackathon submission.

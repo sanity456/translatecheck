@@ -45,6 +45,21 @@ persists a user's wallet key. Do not run it just to inspect an existing contract
 Live evidence is in `deployments/studionet.json`; configuration and source hash
 are in `lib/deployment.ts`.
 
+## Recover a stuck transaction
+
+Use **Resume transaction** to keep tracking the original hash. If it cannot be
+recovered, choose **Stop tracking**, then **Check and stop tracking**. The app
+checks finalized records for up to ten seconds before clearing local tracking.
+An offline network does not prevent you starting another check. This does not
+cancel the on-chain transaction, prove it failed, or automatically resubmit it.
+Check its original link before retrying the same action.
+
+The last stopped transaction link is retained when browser storage is available.
+Older entries without a saved sender cannot prove publication for a wallet;
+reconnect the original wallet to check its publication. Existing assessments and
+publications are reused before another submission. See `VALIDATION.md` for the
+fault-injection regression coverage. StudioNet and the contract are unchanged.
+
 ## Wallets and limitations
 
 Examples, history, and existing results need no wallet. Writes use the explicitly

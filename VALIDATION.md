@@ -1,13 +1,13 @@
 # Release verification
 
-Verified on 2026-09-08 UTC (2026-09-07 local).
+Verification records: 2026-09-08 UTC.
 
 - 32 direct contract tests passed on Windows/Python 3.12, including separately
   invoked validator callbacks for agreement, substantive disagreement, malformed
   evidence, and error handling. Mocked model outputs are not live AI accuracy tests.
-- 11 frontend/protocol/rendering tests passed: scope, exact-text hashes, receipt
+- 25 frontend/protocol/rendering/recovery tests passed: scope, exact-text hashes, receipt
   semantics, selected wallet routing, rejection handling, network switching,
-  and mutually exclusive error/progress feedback.
+  mutually exclusive error/progress feedback, and explicit stale-transaction recovery.
 - Live StudioNet deployment source matches the local SHA-256. Real validators
   assessed French PRESERVED, Spanish CHANGED, Mandarin PRESERVED, and a
   wrong-language Mandarin submission REVIEW. See `deployments/studionet.json`.
@@ -70,3 +70,28 @@ while printing the linter's Unicode checkmark to its CP1252 console, before
 reaching the tests. The contract job now explicitly uses `PYTHONUTF8=1` and
 `PYTHONIOENCODING=utf-8` on both systems. This changes tooling encoding, not
 contract execution or test assertions.
+
+## Stale-transaction recovery correction
+
+A deeper review reproduced a gap not covered by the initial suite: when a saved
+transaction permanently returned a normal lookup error, `pending` stayed set,
+the new-check action stayed disabled, and only another retry was offered.
+
+The app now offers an explicit, confirmed **Stop tracking** action. It performs
+read-only finalized-state reconciliation with a ten-second limit, retains the
+original hash, and clears the local active tracking entry even when the network
+is unavailable. It never turns a missing receipt into a failed or successful
+transaction and never automatically resubmits. Publication recovery requires
+the saved submitting account; legacy entries do not guess the current wallet.
+New publication requests also reuse an already-finalized publication first.
+
+Ten recovery tests cover missing data, network/rate-limit errors, bounded hung
+reads, late responses, exact-content/policy mismatch, blocked assessments, saved
+senders, and legacy publication data. Four component-handler regressions execute
+the actual Workspace source with in-memory React hooks/storage and mocked RPC:
+stop after a missing transaction and reload, cancel confirmation, retain a
+blocked verdict, and reuse an existing publication without a write. These are
+isolated fault tests, not a claim of new browser or real-wallet E2E coverage.
+
+The original 11 frontend tests and 32 contract tests remain. No contract source,
+address, network, repository visibility, or Site access policy was changed.

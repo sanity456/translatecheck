@@ -69,6 +69,8 @@ export type Pending = {
   source: string;
   translation: string;
   target: Language;
+  // Older saved transactions do not have this field. Never guess their sender.
+  account?: `0x${string}`;
 };
 export const LABELS: Record<Verdict, string> = {
   PRESERVED: 'Meaning preserved',
