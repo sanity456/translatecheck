@@ -1,0 +1,523 @@
+{
+  "schema": "translatecheck/live-smoke-v1",
+  "network": "studionet",
+  "chain_id": 61999,
+  "rpc": "https://studio.genlayer.com/api",
+  "source_sha256": "d1822ee1ecb294382228f3343ea39cd322e717b45d859c78ef5d9e3c0fdbc28d",
+  "account": "0xbA209FF6E703d9F7Dc3557bfe705CcA6fa515018",
+  "started_at": "2026-09-08T05:22:19.709Z",
+  "checks": [
+    {
+      "id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+      "example": {
+        "target": "fr",
+        "source": "Free delivery on orders over $50.",
+        "translation": "Livraison gratuite pour les commandes de plus de 50 $.",
+        "verdict": "PRESERVED"
+      },
+      "assessment": {
+        "created_at": "2026-09-08T05:23:07.058494Z",
+        "found": true,
+        "id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+        "policy": "translatecheck/meaning-v1",
+        "review": {
+          "explanation": "The translation accurately preserves the meaning of free delivery for orders exceeding fifty dollars.",
+          "reason_code": "NONE",
+          "source_quote": "Free delivery on orders over $50.",
+          "translation_quote": "Livraison gratuite pour les commandes de plus de 50 $.",
+          "verdict": "PRESERVED"
+        },
+        "source": "Free delivery on orders over $50.",
+        "submitted_by": "0xbA209FF6E703d9F7Dc3557bfe705CcA6fa515018",
+        "target": "fr",
+        "translation": "Livraison gratuite pour les commandes de plus de 50 $."
+      },
+      "gate": {
+        "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "tampered": {
+        "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+        "failure_reasons": [
+          "CONTENT_MISMATCH"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      }
+    },
+    {
+      "id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+      "example": {
+        "target": "es",
+        "source": "Free delivery on orders over $50.",
+        "translation": "Envío gratis en pedidos de menos de 50 $.",
+        "verdict": "CHANGED"
+      },
+      "assessment": {
+        "created_at": "2026-09-08T05:28:13.173715Z",
+        "found": true,
+        "id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+        "policy": "translatecheck/meaning-v1",
+        "review": {
+          "explanation": "The translation changes the condition from 'over $50' to 'less than $50' (menos de 50 $), which is a direct reversal of the eligibility requirement.",
+          "reason_code": "CONDITION",
+          "source_quote": "over $50",
+          "translation_quote": "menos de 50 $",
+          "verdict": "CHANGED"
+        },
+        "source": "Free delivery on orders over $50.",
+        "submitted_by": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "target": "es",
+        "translation": "Envío gratis en pedidos de menos de 50 $."
+      },
+      "gate": {
+        "assessment_id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+        "failure_reasons": [
+          "MEANING_CHANGED"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      },
+      "tampered": {
+        "assessment_id": "f8cf91162e7a6b1bce253a9178bc9efa4ceb83c5721b8d60cf7fcbe692718e81",
+        "failure_reasons": [
+          "CONTENT_MISMATCH",
+          "MEANING_CHANGED"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      }
+    },
+    {
+      "id": "cc67b8e5e537a0cee24801da11fbf0eab0dcdd7b2c78c2c8cd1b9870c6be88b9",
+      "example": {
+        "target": "zh-CN",
+        "source": "Free delivery on orders over $50.",
+        "translation": "订单金额超过50美元即可免费配送。",
+        "verdict": "PRESERVED"
+      },
+      "assessment": {
+        "created_at": "2026-09-08T05:29:59.303358Z",
+        "found": true,
+        "id": "cc67b8e5e537a0cee24801da11fbf0eab0dcdd7b2c78c2c8cd1b9870c6be88b9",
+        "policy": "translatecheck/meaning-v1",
+        "review": {
+          "explanation": "The translation accurately conveys all material meaning: free delivery (免费配送), orders over (订单金额超过), and $50 (50美元) are all faithfully rendered. No negations, conditions, numbers, omissions, or additions differ from the source.",
+          "reason_code": "NONE",
+          "source_quote": "Free delivery on orders over $50.",
+          "translation_quote": "订单金额超过50美元即可免费配送。",
+          "verdict": "PRESERVED"
+        },
+        "source": "Free delivery on orders over $50.",
+        "submitted_by": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "target": "zh-CN",
+        "translation": "订单金额超过50美元即可免费配送。"
+      },
+      "gate": {
+        "assessment_id": "cc67b8e5e537a0cee24801da11fbf0eab0dcdd7b2c78c2c8cd1b9870c6be88b9",
+        "failure_reasons": [],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": true
+      },
+      "tampered": {
+        "assessment_id": "cc67b8e5e537a0cee24801da11fbf0eab0dcdd7b2c78c2c8cd1b9870c6be88b9",
+        "failure_reasons": [
+          "CONTENT_MISMATCH"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      }
+    },
+    {
+      "id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+      "example": {
+        "target": "zh-CN",
+        "source": "The meeting starts at 9 am.",
+        "translation": "La reunión empieza a las nueve de la mañana.",
+        "verdict": "REVIEW"
+      },
+      "assessment": {
+        "created_at": "2026-09-08T05:30:53.350365Z",
+        "found": true,
+        "id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+        "policy": "translatecheck/meaning-v1",
+        "review": {
+          "explanation": "The source is English, but the proposed translation is in Spanish, not Mandarin Chinese in Simplified Chinese script as requested.",
+          "reason_code": "WRONG_LANGUAGE",
+          "source_quote": "The meeting starts at 9 am.",
+          "translation_quote": "La reunión empieza a las nueve de la mañana.",
+          "verdict": "REVIEW"
+        },
+        "source": "The meeting starts at 9 am.",
+        "submitted_by": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "target": "zh-CN",
+        "translation": "La reunión empieza a las nueve de la mañana."
+      },
+      "gate": {
+        "assessment_id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+        "failure_reasons": [
+          "NEEDS_REVIEW"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      },
+      "tampered": {
+        "assessment_id": "8d8e4bd37ba2c59962ef66cb55212e6d5b6d7de1d190291b1330d550e3eea6f2",
+        "failure_reasons": [
+          "CONTENT_MISMATCH",
+          "NEEDS_REVIEW"
+        ],
+        "policy": "translatecheck/meaning-v1",
+        "satisfied": false
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "hash": "0xa1c907c87ec836e44a9a6da327647d653addb6974ca75ef0799ce34cc00243c6",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0xbA209FF6E703d9F7Dc3557bfe705CcA6fa515018",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "agree",
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            }
+          ],
+          "votes": {
+            "0x14402D49f317CE1a2F35BAE01b1804A2A9703dCb": "agree",
+            "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "agree",
+            "0x4aba638Cf0Cf5249437AaD968fC69dde46ae6BAC": "idle",
+            "0xE6BD8050758CB15fC88387223E31Ae2708B119dC": "agree",
+            "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0x1dce916db758947addeab7de9a2e0c983b686a3bab6fa2a39653dfdcd362894f",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0xbA209FF6E703d9F7Dc3557bfe705CcA6fa515018",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "idle",
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "Validator execution cancelled after quorum",
+                "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+              }
+            }
+          ],
+          "votes": {
+            "0x03D58A4DeF6fDFc032A56374785a5F571D07Bc11": "idle",
+            "0x6737ca1d6BDF8b7C4f19143E2D55581Ca64eb7C3": "idle",
+            "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "agree",
+            "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree",
+            "0xDB1c35c1f05d885999b8f13e5735307BcC16Be88": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0x989bee3c88aa8c88112ddd7bb1600f8fb209ad35020088b69b916ac267e28646",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "agree",
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            }
+          ],
+          "votes": {
+            "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
+            "0x4aba638Cf0Cf5249437AaD968fC69dde46ae6BAC": "agree",
+            "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "idle",
+            "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "idle",
+            "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0xfc2e9506bd2b8afd7863f929bc3845ea9a7ac3928d1b23cd11db57c410bb6813",
+      "status": "FINALIZED",
+      "execution_success": false,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "idle",
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "Validator execution cancelled after quorum",
+                "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+              }
+            }
+          ],
+          "votes": {
+            "0x3D83ab507785b95ca5C208bEc80CCe3D5ca98100": "idle",
+            "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+            "0x772ffCd1dF6Cc566eC4b8d3f4F4f8eBbb6B36C84": "agree",
+            "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "agree",
+            "0xec2Fb79cd12255Eb34886CEd7332f27B98DEe658": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0x6acbe310bc08bdb1ac45b5132fc22d915f9e103ab6b47fa981522f5d1697dd90",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "agree",
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            }
+          ],
+          "votes": {
+            "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "agree",
+            "0x76c25AFC12c75485703cCFfd0083AA6201455B25": "disagree",
+            "0x9ea87b28DcA2F79fe108CF06a4c13B4c876AC23d": "idle",
+            "0xE6BD8050758CB15fC88387223E31Ae2708B119dC": "agree",
+            "0xcE1d6bBB36B744536153966B4DD42276f5ADd0F8": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0xb478c297edf66e440d8edf5d54fde5426d3a9f67de3ed7e8f35cd51cd8d82e87",
+      "status": "FINALIZED",
+      "execution_success": false,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "agree",
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            }
+          ],
+          "votes": {
+            "0x14402D49f317CE1a2F35BAE01b1804A2A9703dCb": "agree",
+            "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+            "0x4aba638Cf0Cf5249437AaD968fC69dde46ae6BAC": "agree",
+            "0x90402341F0B0e97b23023c0a87de957FB7148E0F": "idle",
+            "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0x46e0ce7d6145031085f4ec60223fe22e0232c688b59b6a772229290a1f5cb950",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "idle",
+              "execution_result": "ERROR",
+              "genvm_result": {
+                "stderr": "Validator execution cancelled after quorum",
+                "error_code": "CONSENSUS_VALIDATOR_QUORUM_REACHED"
+              }
+            }
+          ],
+          "votes": {
+            "0x3D83ab507785b95ca5C208bEc80CCe3D5ca98100": "agree",
+            "0x4404Fb70d490c935758146f42A73DC850FF95C71": "agree",
+            "0x4EDbE1FC9EAeC7b0EBA849b0C76AE73Eb0ad5C47": "agree",
+            "0xBBb165E4c9d73a1493D363280f7067Cd07891dBE": "agree",
+            "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "idle"
+          }
+        }
+      }
+    },
+    {
+      "hash": "0x1b996e5236a9f101fbf36f7647aaf0404ea536e499a1b5b4ecc9582aef807019",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "receipt": {
+        "statusName": "FINALIZED",
+        "from_address": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8",
+        "to_address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+        "consensus_data": {
+          "leader_receipt": [
+            {
+              "mode": "leader",
+              "vote": null,
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            },
+            {
+              "mode": "validator",
+              "vote": "agree",
+              "execution_result": "SUCCESS",
+              "genvm_result": {
+                "stderr": "",
+                "error_code": null
+              }
+            }
+          ],
+          "votes": {
+            "0x36728d2a123aB444E603EE5b2ad17d18Bb193557": "idle",
+            "0x5310dcF075E0BD47d29B8ec6581F736C767f54D2": "idle",
+            "0x6737ca1d6BDF8b7C4f19143E2D55581Ca64eb7C3": "agree",
+            "0xE6BD8050758CB15fC88387223E31Ae2708B119dC": "agree",
+            "0xacc2459F341D7a887bcA8FAA62F1EC9378d4Bc67": "agree"
+          }
+        }
+      }
+    }
+  ],
+  "address": "0xd79Fc921D3DD42227E81e5f13311643E8720E603",
+  "source_exact": true,
+  "config": {
+    "assessment_count": 4,
+    "languages": {
+      "es": "Spanish",
+      "fr": "French",
+      "zh-CN": "Mandarin Chinese in Simplified Chinese script"
+    },
+    "max_characters": 1200,
+    "policy": "translatecheck/meaning-v1",
+    "publication_count": 1
+  },
+  "passed": true,
+  "harness_notes": [
+    "Receipt parser corrected: Studio included an idle fallback validator in leader_receipt. The actual leader succeeded; no contract change was required."
+  ],
+  "test_accounts": [
+    "0x1D272Ec989D75AA5156aA0D276D00B59169236C8"
+  ],
+  "completed_at": "2026-09-08T05:32:03.386Z",
+  "publication": {
+    "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+    "created_at": "2026-09-08T05:26:58.266368Z",
+    "found": true,
+    "id": "2b7be7aca96fdf27ce9ebfe8f96449538a354b287f9be3cb3748de7f1255b6a0",
+    "policy": "translatecheck/meaning-v1",
+    "publisher": "0x1D272Ec989D75AA5156aA0D276D00B59169236C8"
+  },
+  "read_variant": "latest-final",
+  "finalized_read_verification_passed": true,
+  "verified_at": "2026-09-08T05:42:17.801Z"
+}
