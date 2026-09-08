@@ -26,7 +26,9 @@ def mock(vm, result):
 @pytest.fixture
 def contract(direct_vm, direct_deploy, direct_alice):
     direct_vm.sender = direct_alice
-    return direct_deploy("contracts/translatecheck.py")
+    # Pin the SDK carrier archive too: latest releases renamed the universal asset.
+    # The exact py-genlayer runner is still selected by the contract's pinned hash.
+    return direct_deploy("contracts/translatecheck.py", sdk_version="v0.2.12")
 
 
 def checked(vm, contract, verdict="PRESERVED", reason="NONE", target="fr"):

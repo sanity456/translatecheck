@@ -48,3 +48,17 @@ One cosmetic issue was found: cancellation left an old confirmation instruction
 visible alongside the error. Error paths now clear that notice, and one feedback
 component ensures errors take precedence. Two rendering regressions cover this
 fix. The intelligent contract and wallet submission logic were not changed.
+
+## Clean-run SDK bootstrap correction
+
+The first hosted run failed during test setup, before any contract assertion:
+`genlayer-test` selected the latest GenVM release and requested its obsolete
+`genvm-universal.tar.xz` asset, which returned HTTP 404. Local runs had an SDK
+archive cached, so they had not exercised this download path.
+
+The direct-deploy fixture now explicitly selects `sdk_version="v0.2.12"`, whose
+[official release](https://github.com/genlayerlabs/genvm/releases/tag/v0.2.12)
+contains the universal archive. The contract continues to select its exact
+`py-genlayer` runner by the unchanged header hash; no policy assertion is removed
+or mocked to bypass the failure. The matrix now runs both operating systems to
+completion even if one fails.
