@@ -90,6 +90,7 @@ import {
 import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
 import { RequestFeedback } from '@/lib/feedback';
+import { GoldStream } from '@/app/gold-stream';
 import { reconcilePending } from '@/lib/recovery';
 import {
   checkedSuggestion,
@@ -1366,6 +1367,7 @@ export default function Workspace() {
           </TabsContent>
         </Tabs>
         <footer className="footer">
+          <GoldStream />
           <span className="flex items-center gap-2">
             <ShieldCheck size={15} />
             {configured ? (

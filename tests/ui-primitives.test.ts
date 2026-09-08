@@ -13,7 +13,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const requireDependency = createRequire(import.meta.url);
 
 // Execute actual TS/TSX helpers without adding a browser or another test runtime.
-// Only the external store tests replace React hooks and the Embla/media adapters.
+// Hook tests replace only their state/store hooks and external adapters.
 function loadUi(
   path: string,
   overrides: Record<string, unknown> = {},
@@ -296,4 +296,85 @@ void test('carousel reads live scroll state and cleans up select and reInit list
   for (const cleanup of cleanups) cleanup();
   assert.equal(listeners.get('select')?.size, 0);
   assert.equal(listeners.get('reInit')?.size, 0);
+});
+
+void test('gold stream pauses and resumes through its actual component handler', () => {
+  let paused = false;
+  const exports = loadUi('app/gold-stream.tsx', {
+    react: {
+      ...React,
+      useState: (initial: boolean) => {
+        assert.equal(initial, false);
+        return [
+          paused,
+          (next: (value: boolean) => boolean) => {
+            paused = next(paused);
+          },
+        ];
+      },
+    },
+  });
+  const GoldStream = exports.GoldStream as () => React.ReactElement<{
+    children: [
+      React.ReactElement<{ 'data-paused': boolean }>,
+      React.ReactElement<{ onClick: () => void; children: [unknown, string] }>,
+    ];
+  }>;
+  for (const expected of [false, true, false]) {
+    const [backdrop, button] = GoldStream().props.children;
+    assert.equal(backdrop.props['data-paused'], expected);
+    assert.equal(
+      button.props.children[1],
+      expected ? 'Resume background' : 'Pause background',
+    );
+    button.props.onClick();
+  }
+});
+
+void test('gold stream renders hidden decoration and a named native pause button', () => {
+  const html = markup('app/gold-stream.tsx', 'GoldStream');
+  assert.match(
+    html,
+    /<div[^>]*class="gold-stream-backdrop"[^>]*aria-hidden="true"/,
+  );
+  assert.match(html, /<button[^>]*type="button"/);
+  assert.match(html, /<svg[^>]*aria-hidden="true"/);
+  assert.match(html, /Pause background<\/button>/);
+});
+
+void test('gold stream ships its local texture and honors pause, reduced motion and forced colors', () => {
+  const png = readFileSync(resolve(root, 'public/textures/gold-stream.png'));
+  assert.deepEqual(
+    Array.from(png.subarray(0, 8)),
+    [137, 80, 78, 71, 13, 10, 26, 10],
+  );
+  const header = new DataView(png.buffer, png.byteOffset, png.byteLength);
+  assert.equal(header.getUint32(16), 1536);
+  assert.equal(header.getUint32(20), 1024);
+  const css = readFileSync(resolve(root, 'app/globals.css'), 'utf8');
+  const backdrop = css.match(/\.gold-stream-backdrop \{([^}]+)\}/)?.[1] ?? '';
+  assert.match(backdrop, /pointer-events: none/);
+  assert.match(backdrop, /z-index: -1/);
+  const texture =
+    css.match(/\.gold-stream-backdrop::before \{([^}]+)\}/)?.[1] ?? '';
+  assert.match(texture, /url\('\/textures\/gold-stream\.png'\)/);
+  assert.match(
+    texture,
+    /animation: gold-current 24s ease-in-out infinite alternate/,
+  );
+  const pause =
+    css.match(
+      /\.gold-stream-backdrop\[data-paused='true'\]::before \{([^}]+)\}/,
+    )?.[1] ?? '';
+  assert.match(pause, /animation-play-state: paused/);
+  const reduce = css.slice(
+    css.indexOf('@media (prefers-reduced-motion: reduce)'),
+  );
+  assert.match(reduce, /\*::before,[\s\S]*animation: none !important/);
+  assert.match(reduce, /\.background-motion \{\s*display: none/);
+  const forced = css.slice(css.indexOf('@media (forced-colors: active)'));
+  assert.match(
+    forced,
+    /\.gold-stream-backdrop,\s*\.background-motion \{\s*display: none/,
+  );
 });

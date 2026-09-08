@@ -114,6 +114,7 @@ export function workspaceHarness(options: {
     '@/lib/corrections': corrections,
     '@/lib/deployment': { DEPLOYMENT },
     '@/lib/feedback': { RequestFeedback: 'RequestFeedback' },
+    '@/app/gold-stream': { GoldStream: 'GoldStream' },
     '@/lib/webmcp': { registerTranslationTools: () => () => {} },
     '@/lib/wallet': {
       ...wallet,

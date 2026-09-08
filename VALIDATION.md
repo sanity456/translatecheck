@@ -9,8 +9,9 @@ Verification records: 2026-09-08 UTC.
   truthy strings/numbers in place of a boolean, malformed leader output and errors.
   These are mocked tests, not an accuracy benchmark. Cross-contract reads are
   stubbed in direct mode; the live test below exercises the actual call.
-- 60 frontend tests pass: 49 feature regressions plus 11 evidence/shared-UI
-  regressions added during review maintenance. Feature coverage includes
+- 63 frontend tests pass: 49 feature regressions plus 14 evidence/shared-UI
+  regressions added during review maintenance and the gold-background update.
+  Feature coverage includes
   correction binding to the exact original, advisory flags, malformed/unchanged
   drafts, Unicode quote highlighting, validated
   before/after links, cancellation, bounded recovery, and no automatic writes.
@@ -58,10 +59,26 @@ the actual input and nested buttons remain the native keyboard targets.
 Eight regressions exercise the changed UI helpers and subscription cleanup;
 three bind the evidence to exact text commitments, deployed contract metadata,
 and the documented CI command. Together with the unchanged contract suite this
-is 60 frontend tests and 61 direct contract tests (121 distinct tests). These
+was 60 frontend tests and 61 direct contract tests (121 distinct tests) at that
+maintenance revision. These
 isolated checks are separate from the recorded real-wallet browser test. No
 contract source, address, wallet submission logic, network, or access policy was
 changed by this maintenance.
+
+## Dark-gold stream UI update
+
+The background is now a local dark-gold stream texture with a slow animation,
+dark readable panels, a native pause/resume button, reduced-motion support, and
+forced-colors fallback. Three additional regressions cover its handler, markup,
+and asset/CSS accessibility guards. This brings the frontend suite to 63 tests;
+with the unchanged 61 direct contract tests, there are 124 distinct tests.
+Asset provenance and the exact generation prompt are recorded in
+[the background notes](docs/gold-stream-background.md).
+
+This is a presentation-only change. No new browser or mobile-wallet signing test
+is claimed; previous browser evidence stays tied to its recorded source revision.
+Full lint, TypeScript, frontend tests, and the production build must pass for this
+revision, along with the existing hosted Linux/Windows contract jobs.
 
 ## Earlier release records
 
