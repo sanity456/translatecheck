@@ -352,6 +352,10 @@ void test('gold stream ships its local texture and honors pause, reduced motion 
   assert.equal(header.getUint32(16), 1536);
   assert.equal(header.getUint32(20), 1024);
   const css = readFileSync(resolve(root, 'app/globals.css'), 'utf8');
+  const headerStyle = css.match(/\.site-header \{([^}]+)\}/)?.[1] ?? '';
+  assert.match(headerStyle, /background: #211b12cc/);
+  assert.match(headerStyle, /border-top: 3px solid var\(--royal\)/);
+  assert.doesNotMatch(headerStyle, /background: var\(--royal\)/);
   const backdrop = css.match(/\.gold-stream-backdrop \{([^}]+)\}/)?.[1] ?? '';
   assert.match(backdrop, /pointer-events: none/);
   assert.match(backdrop, /z-index: -1/);

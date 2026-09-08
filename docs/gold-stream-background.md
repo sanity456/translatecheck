@@ -1,8 +1,9 @@
 # Dark-gold stream background
 
 UI-only update, 2026-09-08. The white canvas is replaced by a dark bronze/gold
-texture, with a slow drifting current. Royal-blue navigation, warm-gold accents,
-and near-black panels with light text remain readable against opaque backplates.
+texture, with a slow drifting current. A dark translucent header continues the
+texture, with royal blue limited to a thin top accent on the header. Warm-gold
+accents and near-black panels with light text remain readable against backplates.
 Wallet logic, contracts, network, and assessment/publication policies are unchanged.
 
 ## Asset provenance

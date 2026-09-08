@@ -226,9 +226,10 @@
   }
 }
 .site-header {
-  background: var(--royal);
-  color: var(--white);
-  border-bottom: 3px solid var(--gold);
+  background: #211b12cc;
+  color: var(--foreground);
+  border-top: 3px solid var(--royal);
+  border-bottom: 1px solid var(--border);
 }
 .header-inner {
   max-width: 1320px;
@@ -285,11 +286,12 @@
 }
 .network {
   font-size: 14px;
-  color: var(--white);
+  color: var(--foreground);
+  background: var(--gold-soft);
   display: flex;
   align-items: center;
   gap: 7px;
-  border: 1px solid #ffffff60;
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 12px;
   white-space: nowrap;
