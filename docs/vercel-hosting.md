@@ -1,5 +1,19 @@
 # TranslateCheck on Vercel
 
+## Current public address
+
+Open [translatecheck-studionet.vercel.app](https://translatecheck-studionet.vercel.app/)
+without Vercel login. The owner approved public hosting after the initial
+private migration, then requested the matching `-studionet` name for both apps.
+The earlier `translatecheck.vercel.app` link remains available. Both are
+production domains on the existing project, so they follow future production
+releases. The project and GitHub repository have not been renamed.
+
+The public address change does not redeploy contracts or move on-chain records.
+Reconnect the wallet on the new origin; browser-local drafts and tracking remain
+on their original origin. The initial migration report below is historical,
+not a statement that the current production website is private.
+
 ## Ownership and privacy
 
 - Account: `sanity456`; personal workspace: `sanity3` (display name `sanity`).
@@ -8,16 +22,16 @@
 - Hobby plan; no paid upgrade or add-on was enabled.
 - Vercel Authentication is enabled with
   `ssoProtection.deploymentType = prod_deployment_urls_and_all_previews`.
-- Use only the authenticated, unaliased deployment URL while privacy is required.
-  A preview flag alone did not preserve the requested target on the first upload;
-  see the verified migration outcome below.
+- Production domains are public by owner approval. Preview and generated
+  deployment URLs remain protected. Do not confuse website access with the
+  GitHub repository's visibility: the repository remains private.
 - There is no connected Git integration or automatic production deployment.
   The source remains in the private `sanity456/translatecheck` GitHub repository.
 
 [Vercel's Hobby protection](https://vercel.com/docs/deployment-protection)
-protects preview and generated deployment URLs, but not the production domain. A private deployment
-is not a public hackathon submission link. Obtain approval before a public
-production launch or before connecting automatic Git deployments.
+protects preview and generated deployment URLs, but not production domains.
+Use the public app link above for sharing. Connecting automatic Git deployments
+remains a separate, unapproved change.
 
 ## Build and deploy
 
@@ -41,20 +55,25 @@ npm run build
 vercel deploy --dry --json --target preview --scope sanity3 --project prj_HX3OBG4TceiYqG1LWl9TgRfYOXU9
 ```
 
-Before uploading, inspect the dry-run files and verify that the project still
-has Vercel Authentication enabled. The dry run uploads nothing. Do not assume
+Before uploading, inspect the dry-run files. The dry run uploads nothing.
+For a public release, verify READY status and unauthenticated HTTP 200 on the
+primary production domain; keep preview protection enabled. For any future
+request to make the site private, do not assume
 `--target preview` can safely bootstrap a private project: this migration found
 that Vercel coerced its first deployment to production. Do not use `staging`
 as a workaround; it also created an alias. Future private deployments must avoid
 automatic alias assignment and verify every actual alias and public project
-domain, not merely the target label. After deploying, verify READY status and
-that an unauthenticated HTTP request is denied or redirected to Vercel login.
+domain, not merely the target label. A private release must deny or redirect
+unauthenticated HTTP requests to Vercel login.
 Never upload environment files or paste protection
 bypass credentials into evidence or links. The local `.vercel` link stays
 ignored by Git. CLI linking may create an ignored `.env.local` containing an
 OIDC token; the app does not need that file.
 
-## Verified migration outcome — 2026-09-08
+## Initial private migration snapshot — 2026-09-08
+
+This is the state verified before the subsequent owner-approved public launch
+and domain naming change. It is retained as historical evidence.
 
 - [Private deployed app](https://translatecheck-8ikcrck4f-sanity3.vercel.app).
 - [Deployment dashboard](https://vercel.com/sanity3/translatecheck/5EG463z5wG3EVBsnn9VNz1Pni21v).
