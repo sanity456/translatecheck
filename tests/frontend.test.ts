@@ -1,9 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { RequestFeedback } from '../lib/feedback.ts';
 import {
   contentId,
   executionSucceeded,
   plain,
+  safeError,
   validateDraft,
 } from '../lib/protocol.ts';
 import {
@@ -169,4 +173,39 @@ void test('declined network switch is not retried as add-chain', async () => {
     }),
   );
   assert.deepEqual(methods, ['eth_chainId', 'wallet_switchEthereumChain']);
+});
+
+void test('wallet cancellation replaces stale confirmation instructions', () => {
+  const html = renderToStaticMarkup(
+    createElement(RequestFeedback, {
+      error: safeError({ code: 4001 }),
+      notice: 'Confirm the network and transaction in your selected wallet.',
+    }),
+  );
+  assert.match(html, /role="alert"/);
+  assert.match(
+    html,
+    /You declined the wallet request\. Nothing was submitted\./,
+  );
+  assert.doesNotMatch(html, /Confirm the network|<output/);
+});
+
+void test('normal progress is shown only without an error', () => {
+  const html = renderToStaticMarkup(
+    createElement(RequestFeedback, {
+      error: '',
+      notice: 'Waiting for GenLayer finalization.',
+    }),
+  );
+  assert.match(
+    html,
+    /<output[^>]*>Waiting for GenLayer finalization\.<\/output>/,
+  );
+  assert.doesNotMatch(html, /role="alert"/);
+  assert.equal(
+    renderToStaticMarkup(
+      createElement(RequestFeedback, { error: '', notice: '' }),
+    ),
+    '',
+  );
 });

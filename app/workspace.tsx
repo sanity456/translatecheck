@@ -74,6 +74,7 @@ import {
 } from '@/lib/wallet';
 import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
+import { RequestFeedback } from '@/lib/feedback';
 
 const PENDING_KEY = 'translatecheck:pending:61999:' + DEPLOYMENT.address;
 function recoverPending(): Pending | null {
@@ -357,6 +358,7 @@ export default function Workspace() {
       await track(pending);
     } catch (e) {
       if (e instanceof ExecutionError) savePending(null);
+      setNotice('');
       setError(safeError(e));
     } finally {
       busyRef.current = false;
@@ -378,6 +380,7 @@ export default function Workspace() {
         'Wallet connected. Click Check meaning to submit when you are ready.',
       );
     } catch (e) {
+      setNotice('');
       setError(safeError(e));
     } finally {
       busyRef.current = false;
@@ -459,6 +462,7 @@ export default function Workspace() {
       await track(p);
     } catch (e) {
       if (e instanceof ExecutionError) savePending(null);
+      setNotice('');
       setError(safeError(e));
     } finally {
       busyRef.current = false;
@@ -517,12 +521,7 @@ export default function Workspace() {
           </div>
           <span className="badge">EN → FR / ES / 中文</span>
         </div>
-        {error && (
-          <div className="notice error" role="alert">
-            {error}
-          </div>
-        )}
-        {notice && <output className="notice block">{notice}</output>}
+        <RequestFeedback error={error} notice={notice} />
         {pending && (
           <div className="notice">
             <div className="flex flex-wrap items-center justify-between gap-3">

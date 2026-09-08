@@ -5,8 +5,9 @@ Verified on 2026-09-08 UTC (2026-09-07 local).
 - 32 direct contract tests passed on Windows/Python 3.12, including separately
   invoked validator callbacks for agreement, substantive disagreement, malformed
   evidence, and error handling. Mocked model outputs are not live AI accuracy tests.
-- 9 frontend/protocol tests passed: scope, exact-text hashes, receipt semantics,
-  selected wallet routing, rejection handling, and network switching.
+- 11 frontend/protocol/rendering tests passed: scope, exact-text hashes, receipt
+  semantics, selected wallet routing, rejection handling, network switching,
+  and mutually exclusive error/progress feedback.
 - Live StudioNet deployment source matches the local SHA-256. Real validators
   assessed French PRESERVED, Spanish CHANGED, Mandarin PRESERVED, and a
   wrong-language Mandarin submission REVIEW. See `deployments/studionet.json`.
@@ -31,6 +32,19 @@ the obsolete `stateStatus` argument is not used in the app or verification scrip
 
 ## Still required before submission
 
-Real browser-extension wallet signing, complete interactive/mobile browser QA,
-and a passing hosted Linux/Windows CI run. A CI workflow is supplied but has not
-yet been run on GitHub. This private first release is not claimed submission-ready.
+A passing hosted Linux/Windows CI run and publicly accessible submission links.
+Real mobile-device wallet testing and other-wallet compatibility have not been
+verified. Do not describe MetaMask results as universal wallet support.
+
+## Real-wallet browser verification
+
+Chrome and MetaMask were tested on the private deployed site. See
+`BROWSER_TEST_REPORT.md` and `deployments/browser-wallet-test.json` for the exact
+transactions, expected outcomes, and limitations. Assessment and publication
+both finalized with successful execution and matching finalized contract reads.
+The canceled request created no assessment; the existing five records remained.
+
+One cosmetic issue was found: cancellation left an old confirmation instruction
+visible alongside the error. Error paths now clear that notice, and one feedback
+component ensures errors take precedence. Two rendering regressions cover this
+fix. The intelligent contract and wallet submission logic were not changed.

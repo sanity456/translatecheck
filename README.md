@@ -60,7 +60,10 @@ Direct tests mock model results. Captured-validator tests additionally exercise
 independent agreement/disagreement. The live smoke uses real GenVM validators
 and asserts execution success, not merely transaction status. CI is supplied for
 Linux and Windows but is not evidence of a hosted run until pushed and passing.
-Real browser-extension signing and complete browser QA remain required before
-hackathon submission. Unit tests do not prove those interactions.
+Actual Chrome/MetaMask signing, assessment, publication, cancellation, reconnect,
+and interrupted-transaction recovery were verified. See `BROWSER_TEST_REPORT.md`
+and `deployments/browser-wallet-test.json`. Mobile-device wallet testing and
+actual OKX/Phantom compatibility remain unverified. Unit tests do not prove those
+interactions. Public access and hosted CI must be verified before submission.
 
 See `ARCHITECTURE.md` and `SECURITY.md` for boundaries.
