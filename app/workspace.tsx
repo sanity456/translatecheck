@@ -741,7 +741,9 @@ export default function Workspace() {
             <span className="brand-icon">
               <Languages size={22} />
             </span>
-            TranslateCheck
+            <span className="brand-wordmark">
+              Translate<span>Check</span>
+            </span>
           </div>
           <div className="header-actions">
             <span className="network">StudioNet · test network</span>
@@ -763,12 +765,14 @@ export default function Workspace() {
         <div className="topline">
           <div>
             <div className="eyebrow">A second look at the meaning</div>
-            <h1>Good words. Same message?</h1>
+            <h1>
+              Good words. <span>Same message?</span>
+            </h1>
             <p className="subtle">
               Check your translation before it goes out into the world.
             </p>
           </div>
-          <span className="badge">EN → FR / ES / 中文</span>
+          <span className="language-scope">EN → FR / ES / 中文</span>
         </div>
         <RequestFeedback error={error} notice={notice} />
         {pending && (
@@ -826,12 +830,12 @@ export default function Workspace() {
           </p>
         )}
         <Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
-          <TabsList variant="line" className="mb-6 h-11 gap-6">
-            <TabsTrigger value="check" className="px-1 text-[15px]">
+          <TabsList className="workspace-nav">
+            <TabsTrigger value="check" className="workspace-tab">
               <FileCheck2 />
               Translation check
             </TabsTrigger>
-            <TabsTrigger value="history" className="px-1 text-[15px]">
+            <TabsTrigger value="history" className="workspace-tab">
               <History />
               Public history
             </TabsTrigger>
@@ -839,7 +843,7 @@ export default function Workspace() {
           <TabsContent value="check">
             <div className="work-grid">
               <section>
-                <div className="surface">
+                <div className="surface editor-surface">
                   <div className="surface-head">
                     <h2>
                       <span className="step">01</span>
@@ -1138,7 +1142,7 @@ export default function Workspace() {
                   </section>
                 )}
               </section>
-              <aside className="surface" aria-live="polite">
+              <aside className="surface result-surface" aria-live="polite">
                 <div className="surface-head">
                   <h2>
                     <span className="step">02</span>The meaning check
@@ -1421,7 +1425,7 @@ export default function Workspace() {
         </AlertDialogContent>
       </AlertDialog>
       <Dialog open={walletOpen} onOpenChange={setWalletOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="wallet-dialog sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Connect your wallet</DialogTitle>
             <DialogDescription>
