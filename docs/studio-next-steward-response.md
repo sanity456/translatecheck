@@ -7,8 +7,10 @@ Next (chain 61997), not stable Studio 61999. The active read/write clients, wall
 switch/add requests, transaction tracking, and both checker/correction verification
 links use the same Next configuration. Both contracts were deployed with the
 Next-compatible pinned runtime and their on-chain sources verified byte-for-byte.
-The live assess → correct → independently recheck → publish workflow passed on
-61997. The incorrect original remains blocked; an unassessed suggestion and
+The SDK-signed assess → correct → independently recheck → publish workflow passed
+on 61997. A separate Chrome/MetaMask test then passed three user-approved
+transactions: assessment, advisory correction and independent recheck. The
+incorrect original remains blocked; an unassessed suggestion and
 altered content cannot satisfy the publication gate. The original history is
 unchanged. Evidence below includes addresses, source hashes, successful finalized
 transactions, exact inputs and policy payloads. Local verification passed 61
@@ -19,9 +21,10 @@ contract tests, 79 app tests, lint, type checking and the production build.
 - [Public app](https://translatecheck-studionet.vercel.app/)
 - [Source repository](https://github.com/sanity456/translatecheck)
 - [Structured release evidence](../deployments/studio-next.json)
+- [Fresh Chrome/MetaMask evidence on 61997](../deployments/metamask-studio-next-workflow.json)
 - [Active network configuration](../lib/network.ts)
 - [Active contract configuration](../lib/deployment.ts)
-- [Hosted checks](https://github.com/sanity456/translatecheck/actions)
+- [Passing CI for deployed source 865608c](https://github.com/sanity456/translatecheck/actions/runs/35076197671)
 - [Verified before/after comparison](https://translatecheck-studionet.vercel.app/?assessment=f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832&compare=979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3)
 
 Chain: **61997** (`0xf22d`), RPC: `https://studio-dev.genlayer.com/api`.
@@ -80,6 +83,42 @@ Editing the revision clears approval. A new, unassessed text requires a wallet
 on 61997. Studio Next uses estimated test-GEN protocol deposits; the old gasless
 wording has been removed. No real tokens were used for this sandbox verification.
 
+## Fresh Chrome/MetaMask verification on Studio Next
+
+On 2026-09-16, the public Vercel app completed a separate desktop Chrome/MetaMask
+flow on **61997**. The owner approved all three transactions. Each was verified
+as `FINALIZED` **and** `FINISHED_WITH_RETURN`, then read using `LATEST_FINAL`.
+The deployed app source revision is `865608c5304acea45c0cd48cd9ccd29981f90e50`;
+this evidence-only update does not change the deployed app or contracts.
+
+| Action | Transaction |
+|---|---|
+| Assess incorrect French | [0x8d4fed829e5331ae153fdc5582c5a2e5790bbab386e657cfd5fb728d6c16cec5](https://explorer-studio-dev.genlayer.com/tx/0x8d4fed829e5331ae153fdc5582c5a2e5790bbab386e657cfd5fb728d6c16cec5) |
+| Request advisory correction | [0x14395afd87f6b0dee09c826367d58ba8d4f6d9485c93bff0b53161adf3afa4fb](https://explorer-studio-dev.genlayer.com/tx/0x14395afd87f6b0dee09c826367d58ba8d4f6d9485c93bff0b53161adf3afa4fb) |
+| Independently recheck revision | [0x647acfc58f11dee361b2bf16c8ea7ee3eff945e5541d8f48b04600c019ab97e0](https://explorer-studio-dev.genlayer.com/tx/0x647acfc58f11dee361b2bf16c8ea7ee3eff945e5541d8f48b04600c019ab97e0) |
+
+English: **Free delivery on orders over $50.**
+
+Original French: **Livraison gratuite pour les commandes de moins de 50 $.**
+The immutable original is `CHANGED / CONDITION`; its gate is
+`{"satisfied":false,"failure_reasons":["MEANING_CHANGED"]}`.
+
+Corrected French: **Livraison gratuite pour les commandes de plus de 50 $.**
+The companion returns `advisory_only: true` and
+`requires_separate_assessment: true`. The browser labelled the suggestion as a
+draft and kept publication blocked after **Use suggestion**. Only a separately
+approved checker transaction produced `PRESERVED / NONE`, with
+`{"satisfied":true,"failure_reasons":[]}` for the exact corrected content.
+Changing the source amount to $500 returns
+`{"satisfied":false,"failure_reasons":["CONTENT_MISMATCH"]}`.
+The original was compared with the pre-correction snapshot and was unchanged.
+
+[Open the verified French before/after comparison](https://translatecheck-studionet.vercel.app/?assessment=2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107&compare=f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0).
+The structured MetaMask evidence includes exact inputs, timestamps, IDs, wallet,
+transactions and policy payloads. This French wallet test did **not** publish;
+the successful Next publication evidence is the separate SDK-signed Spanish
+workflow above. Mobile, OKX and Phantom signing are not claimed.
+
 ## Compatibility and evidence boundaries
 
 The original issue was inconsistent active network configuration, compounded by
@@ -99,9 +138,17 @@ The 61 direct tests use model mocks and invoked validator callbacks; they are no
 an AI accuracy benchmark. The 79 app tests include actual writer-handler tests
 with isolated RPC/provider doubles, not real extension signing. The local browser
 loaded both finalized results from Next and cleared approval when edited.
-The older Chrome/MetaMask and demo-video evidence remains historical **61999**
-evidence; this report does not claim a fresh manual MetaMask, mobile, OKX or Phantom
-signing test. Hosted CI results must be checked for the submitted revision.
+The older Chrome/MetaMask reports and demo video remain historical **61999**
+evidence. They are not relabelled as Next tests; the fresh 61997 MetaMask evidence
+is explicitly separated above. The linked CI passed all three jobs for the
+deployed source revision, including 61 direct contract tests, 79 app tests,
+lint, type checking and build. Direct and provider-double tests are not evidence
+of other-wallet or physical mobile compatibility.
+
+The submission readiness audit also found four high-severity entries in the
+Cloudflare development-tool dependency chain; `npm audit --omit=dev` returned
+zero advisories on 2026-09-16. Those development dependencies are not patched by
+this evidence update. This is not a claim of a comprehensive security audit.
 
 Existing stable deployments and historical evidence remain available. This
 change does not copy their records into Studio Next or silently resume their

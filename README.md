@@ -87,6 +87,14 @@ Do not run a write script merely to inspect the app. The new live workflow cover
 an incorrect Spanish assessment, an advisory correction, independent recheck,
 tampered-content rejection and exact-text publication.
 
+Fresh **61997** Chrome/MetaMask testing on 2026-09-16 passed three user-approved
+transactions: an incorrect French assessment, advisory correction and separate
+recheck. The original remained blocked and unchanged, the exact revision passed,
+and mismatched content was rejected. This wallet test did not publish. See the
+[Studio Next review response](docs/studio-next-steward-response.md) and
+[structured wallet evidence](deployments/metamask-studio-next-workflow.json).
+The SDK-signed Spanish workflow above separately verifies publication on Next.
+
 Historical **61999** testing also covered French and Mandarin and a completed
 Chrome/MetaMask signing journey. Those three user-approved transactions covered
 assessment, native correction and separate recheck; reload and editing checks

@@ -1,0 +1,130 @@
+{
+  "verified_at": "2026-09-16T09:51:30.802Z",
+  "app": "https://translatecheck-studionet.vercel.app/",
+  "source_revision": "865608c5304acea45c0cd48cd9ccd29981f90e50",
+  "browser": "Chrome",
+  "wallet": "MetaMask",
+  "approval": "All three approvals performed by the user",
+  "chain_id": 61997,
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "checker": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+  "corrections": "0x275068022df67d8502d1669DF4668e5ccae7EAcf",
+  "account": "0x7Cef5DBbD598ba74EF9C665c9853E573448d97D0",
+  "transactions": [
+    {
+      "action": "assess_original",
+      "hash": "0x8d4fed829e5331ae153fdc5582c5a2e5790bbab386e657cfd5fb728d6c16cec5",
+      "contract": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN"
+    },
+    {
+      "action": "suggest_correction",
+      "hash": "0x14395afd87f6b0dee09c826367d58ba8d4f6d9485c93bff0b53161adf3afa4fb",
+      "contract": "0x275068022df67d8502d1669DF4668e5ccae7EAcf",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN"
+    },
+    {
+      "action": "assess_revision",
+      "hash": "0x647acfc58f11dee361b2bf16c8ea7ee3eff945e5541d8f48b04600c019ab97e0",
+      "contract": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN"
+    }
+  ],
+  "original": {
+    "created_at": "2026-09-16T09:39:22.553484Z",
+    "found": true,
+    "id": "f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+    "policy": "translatecheck/meaning-v1",
+    "review": {
+      "explanation": "The eligibility condition is reversed. The source says free delivery applies to orders over $50, but the translation says it applies to orders under $50.",
+      "reason_code": "CONDITION",
+      "source_quote": "over $50",
+      "translation_quote": "moins de 50 $",
+      "verdict": "CHANGED"
+    },
+    "source": "Free delivery on orders over $50.",
+    "submitted_by": "0x7Cef5DBbD598ba74EF9C665c9853E573448d97D0",
+    "target": "fr",
+    "translation": "Livraison gratuite pour les commandes de moins de 50 $."
+  },
+  "original_gate": {
+    "assessment_id": "f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+    "failure_reasons": [
+      "MEANING_CHANGED"
+    ],
+    "policy": "translatecheck/meaning-v1",
+    "satisfied": false
+  },
+  "correction": {
+    "advisory_only": true,
+    "checker": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+    "created_at": "2026-09-16T09:47:29.662595Z",
+    "found": true,
+    "original_translation": "Livraison gratuite pour les commandes de moins de 50 $.",
+    "parent_id": "f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+    "policy": "translatecheck/correction-v1",
+    "requested_by": "0x7Cef5DBbD598ba74EF9C665c9853E573448d97D0",
+    "requires_separate_assessment": true,
+    "source": "Free delivery on orders over $50.",
+    "suggestion": {
+      "explanation": "I corrected the eligibility condition from “moins de 50 $” to “plus de 50 $” so it matches the source phrase “over $50.” The rest of the meaning is unchanged.",
+      "status": "SUGGESTED",
+      "translation": "Livraison gratuite pour les commandes de plus de 50 $."
+    },
+    "target": "fr"
+  },
+  "revision": {
+    "created_at": "2026-09-16T09:49:44.922552Z",
+    "found": true,
+    "id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+    "policy": "translatecheck/meaning-v1",
+    "review": {
+      "explanation": "The translation accurately preserves the meaning: free delivery applies to orders exceeding $50.",
+      "reason_code": "NONE",
+      "source_quote": "Free delivery on orders over $50.",
+      "translation_quote": "Livraison gratuite pour les commandes de plus de 50 $.",
+      "verdict": "PRESERVED"
+    },
+    "source": "Free delivery on orders over $50.",
+    "submitted_by": "0x7Cef5DBbD598ba74EF9C665c9853E573448d97D0",
+    "target": "fr",
+    "translation": "Livraison gratuite pour les commandes de plus de 50 $."
+  },
+  "revised_gate": {
+    "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+    "failure_reasons": [],
+    "policy": "translatecheck/meaning-v1",
+    "satisfied": true
+  },
+  "mismatched_gate": {
+    "assessment_id": "2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107",
+    "failure_reasons": [
+      "CONTENT_MISMATCH"
+    ],
+    "policy": "translatecheck/meaning-v1",
+    "satisfied": false
+  },
+  "publication": {
+    "found": false
+  },
+  "original_unchanged": true,
+  "browser_observations_before_recheck": {
+    "draft_labelled_advisory": true,
+    "use_suggestion_did_not_submit_or_publish": true,
+    "unassessed_revision_displayed_publication_blocked": true,
+    "separate_recheck_required_wallet_approval": true
+  },
+  "comparison_url": "https://translatecheck-studionet.vercel.app/?assessment=2ac14e884cf62adab2a7f737dc5af0255df50b23b3df297088ccb1992619a107&compare=f64e733324d5cb45920857ec4ff369c4efcfe7ba5adc8cc3cbf62a221c7d31b0",
+  "scope": "Three fresh Chrome/MetaMask user-signed transactions: assessment, advisory correction, independent recheck. No wallet-signed publication, mobile or other-wallet coverage claimed.",
+  "browser_observations_after_recheck": {
+    "finalized_result_displayed": true,
+    "comparison_showed_original_changed_and_revision_preserved": true,
+    "publication_button_available_but_not_clicked": true
+  }
+}
