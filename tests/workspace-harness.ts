@@ -9,11 +9,12 @@ import * as protocol from '../lib/protocol.ts';
 import * as recovery from '../lib/recovery.ts';
 import * as corrections from '../lib/corrections.ts';
 import * as wallet from '../lib/wallet.ts';
-import { DEPLOYMENT } from '../lib/deployment.ts';
+import { DEPLOYMENT, CORRECTIONS_DEPLOYMENT } from '../lib/deployment.ts';
+import * as network from '../lib/network.ts';
 import type { FinalizedReader } from '../lib/recovery.ts';
 
 const require = createRequire(import.meta.url);
-export const pendingKey = 'translatecheck:pending:61999:' + DEPLOYMENT.address;
+export const pendingKey = network.pendingStorageKey(DEPLOYMENT.address);
 export const stoppedKey = pendingKey + ':last-stopped';
 type Node = {
   type: unknown;
@@ -113,6 +114,7 @@ export function workspaceHarness(options: {
     '@/lib/recovery': recovery,
     '@/lib/corrections': corrections,
     '@/lib/deployment': { DEPLOYMENT },
+    '@/lib/network': network,
     '@/lib/feedback': { RequestFeedback: 'RequestFeedback' },
     '@/app/gold-stream': { GoldStream: 'GoldStream' },
     '@/app/brand': { Brand: 'Brand', Mascot: 'Mascot' },
@@ -130,9 +132,9 @@ export function workspaceHarness(options: {
       configured: true,
       contractAddress: DEPLOYMENT.address,
       correctionsConfigured: true,
-      correctionsAddress: '0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e',
+      correctionsAddress: CORRECTIONS_DEPLOYMENT.address,
       readSuggestion: options.suggestions ?? (async () => ({ found: false })),
-      explorer: 'https://explorer-studio.genlayer.com',
+      explorer: network.NETWORK.explorer,
       ExecutionError: class extends Error {},
       read: (name: keyof protocol.ViewSpec, args: unknown[]) =>
         name === 'list_assessments'

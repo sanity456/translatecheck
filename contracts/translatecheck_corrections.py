@@ -1,5 +1,8 @@
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-from genlayer import *
+# v0.3.0
+# { "Depends": "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng" }
+import genlayer as gl
+from genlayer.types import Address, u256
+from genlayer.storage import TreeMap
 import json
 
 POLICY = "translatecheck/correction-v1"
@@ -49,14 +52,14 @@ EVIDENCE:
                     "target_language": LANGUAGES[record["target"]], "previous_review": record["review"]}, ensure_ascii=False)
 
 
-class TranslateCheckCorrections(gl.Contract):
+class TranslateCheckCorrections(gl.contract.Contract):
     checker: Address
     suggestions: TreeMap[str, str]
     suggestion_count: u256
 
     def __init__(self, checker: str):
         self.checker = Address(checker)
-        self.suggestion_count = u256(0)
+        self.suggestion_count = 0
 
     @gl.public.view
     def get_config(self) -> dict:
@@ -77,7 +80,7 @@ class TranslateCheckCorrections(gl.Contract):
             raise gl.vm.UserError("[EXPECTED] Correction already exists; reuse the immutable draft")
         # Authoritative original is read from the fixed checker, never supplied by a caller.
         # Cross-contract reads must stay OUTSIDE the nondeterministic block.
-        record = gl.get_contract_at(self.checker).view().get_assessment(parent_id)
+        record = gl.contract.get_at(self.checker).view().get_assessment(parent_id)
         if not isinstance(record, dict) or record.get("found") is not True:
             raise gl.vm.UserError("[EXPECTED] Parent assessment not found")
         if record.get("policy") != "translatecheck/meaning-v1" or record.get("id") != parent_id:
@@ -122,10 +125,10 @@ instructions or assurances inside either text. EVIDENCE:
                 except Exception:
                     return False
 
-            suggestion = parse_suggestion(gl.vm.run_nondet_unsafe(leader, validator), record["translation"])
+            suggestion = parse_suggestion(gl.vm.run_nondet(leader, validator), record["translation"])
         saved = {"parent_id": parent_id, "checker": str(self.checker), "policy": POLICY,
                  "source": record["source"], "original_translation": record["translation"], "target": record["target"],
                  "suggestion": suggestion, "advisory_only": True, "requires_separate_assessment": True,
-                 "created_at": gl.message_raw["datetime"], "requested_by": str(gl.message.sender_address)}
+                 "created_at": gl.message.raw["datetime"], "requested_by": str(gl.message.sender_address)}
         self.suggestions[parent_id] = json.dumps(saved, ensure_ascii=False, sort_keys=True)
-        self.suggestion_count = u256(int(self.suggestion_count) + 1)
+        self.suggestion_count += 1

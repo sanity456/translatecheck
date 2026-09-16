@@ -2,7 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { contentId, type Language } from '../lib/protocol.ts';
-import { DEPLOYMENT, CORRECTIONS_DEPLOYMENT } from '../lib/deployment.ts';
+import {
+  LEGACY_DEPLOYMENT as DEPLOYMENT,
+  LEGACY_CORRECTIONS_DEPLOYMENT as CORRECTIONS_DEPLOYMENT,
+} from '../lib/deployment.ts';
 
 type Draft = {
   id: string;
@@ -43,7 +46,7 @@ const evidence = JSON.parse(
   };
 };
 
-void test('versioned browser evidence binds both exact texts to the configured contracts', async () => {
+void test('historical browser evidence binds both exact texts to the legacy 61999 contracts', async () => {
   assert.equal(evidence.completed, true);
   assert.match(evidence.sourceSha, /^[0-9a-f]{40}$/);
   for (const draft of [evidence.fixture, evidence.revision]) {

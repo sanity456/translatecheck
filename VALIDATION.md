@@ -1,6 +1,36 @@
 # Release verification
 
-Verification records: 2026-09-08 UTC.
+## Studio Next migration — 2026-09-16
+
+Current release evidence is `deployments/studio-next.json`, bound to the active
+checker/correction addresses in `lib/deployment.ts`. The active SDK preset,
+wallet requests, read/write clients, and both verification links target 61997.
+The runtime and SDK are pinned to compatible v0.3 / consensus-v0.6 releases.
+This is a network/runtime migration; meaning policy and publication rules stay
+unchanged. Historical 61999 records are preserved, not copied into the new chain.
+
+The release verifier asserts exact deployed source hashes, successful execution
+(not merely FINALIZED status), correction-to-checker binding, a blocked incorrect
+translation, an unassessed advisory draft remaining blocked, a separate passing
+recheck, rejection of changed content, immutable original history and publication.
+Use `node scripts/verify-deployment.mjs` for read-only reproduction.
+
+Wallet switching has isolated provider tests, including stable-to-Next switching,
+unknown-network addition, wrong-network refusal and pending-storage isolation.
+These tests and SDK-signed sandbox execution are not a new manual MetaMask or
+mobile signing run. Earlier browser evidence below remains tied to chain 61999.
+
+All 61 direct contract tests pass on the migrated runtime. The Windows temporary
+stdin shim remains necessary; its imports now use the v0.3 layout. The test SDK
+still auto-parses mock JSON into an object, while the pinned runner expects JSON
+text in the WASI response envelope. The compatibility shim reserializes that
+transport value; it does not replace any parser, validator, gate or storage rule.
+Malformed-output, disagreement and failed-execution assertions remain in place.
+
+## Historical verification records — 2026-09-08 UTC
+
+The sections below describe older revisions; references to unchanged addresses,
+private access and previous toolchain versions apply only to those revisions.
 
 ## Fix & Recheck release
 

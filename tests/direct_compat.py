@@ -1,21 +1,34 @@
-"""genlayer-test 0.29.2 Windows stdin and cross-platform warp compatibility.
+"""genlayer-test 0.30.0rc2 transport compatibility for the pinned Next runner.
 
 Infrastructure shim only: no review output, gate result, or storage is mocked here.
 """
 import os
 import sys
 import tempfile
+import json
 
 
 def install():
     from gltest.direct import loader
+    from gltest.direct import wasi_mock
     from gltest.direct.vm import VMContext
     if getattr(loader, "_translatecheck_compat", False):
         return
+    # The pinned v0.3 runner decodes JSON *text* from the WASI envelope. The
+    # test SDK still auto-parses mock JSON into a dict (the old wire format).
+    # Serialize that envelope value back; preserve errors and malformed text.
+    # No contract parser, validator, gate, or state-write behavior is replaced.
+    original_llm = wasi_mock._handle_llm_request
+    def llm_json_text(vm, data):
+        response = original_llm(vm, data)
+        if isinstance(response, dict) and "ok" in response and not isinstance(response["ok"], str):
+            return {**response, "ok": json.dumps(response["ok"], ensure_ascii=False)}
+        return response
+    wasi_mock._handle_llm_request = llm_json_text
     if sys.platform == "win32":
         def inject(vm):
-            from genlayer.py import calldata
-            from genlayer.py.types import Address
+            from genlayer import calldata
+            from genlayer.types import Address
             address = lambda x: Address(x) if isinstance(x, bytes) else x
             encoded = calldata.encode({"contract_address": address(vm._contract_address),
                 "sender_address": address(vm.sender), "origin_address": address(vm.origin),
@@ -45,11 +58,4 @@ def install():
                     vm._translatecheck_stdin_path = None
         loader._inject_message_to_fd0 = inject
         VMContext._cleanup_after_deactivate = cleanup
-    refresh_original = VMContext._refresh_gl_message
-    def refresh(vm):
-        refresh_original(vm)
-        module = sys.modules.get("genlayer.gl")
-        if module is not None and getattr(module, "message_raw", None) is not None:
-            module.message_raw["datetime"] = vm._datetime
-    VMContext._refresh_gl_message = refresh
     loader._translatecheck_compat = True

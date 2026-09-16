@@ -1,0 +1,713 @@
+{
+  "chain_id": 61997,
+  "rpc": "https://studio-dev.genlayer.com/api",
+  "explorer": "https://explorer-studio-dev.genlayer.com",
+  "sdk_version": "2.0.0-rc.1",
+  "started_at": "2026-09-16T08:10:08.558Z",
+  "contracts": {
+    "checker": {
+      "address": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "deployment_tx": "0xd4f613e71d69e24971dd138f95e69840f6d6d787b5ff19e59d25c1f945bc3b6a",
+      "source_sha256": "4c5037921ec50e138374e6d61b1af9e864454b8c35b0b13ea37a892ff29e3c19",
+      "source_exact": true,
+      "config": {
+        "assessment_count": 0,
+        "languages": {
+          "es": "Spanish",
+          "fr": "French",
+          "zh-CN": "Mandarin Chinese in Simplified Chinese script"
+        },
+        "max_characters": 1200,
+        "policy": "translatecheck/meaning-v1",
+        "publication_count": 0
+      }
+    },
+    "corrections": {
+      "address": "0x275068022df67d8502d1669DF4668e5ccae7EAcf",
+      "deployment_tx": "0x3c00e9984fb21ebf21078232b3be6555f03697d0ea7bddeea66540d8e8d0d630",
+      "source_sha256": "6139dde97d71bc356d9af2837937d0f3fa675ec4e9978950af7b18b421b4d2e9",
+      "source_exact": true,
+      "config": {
+        "advisory_only": true,
+        "checker": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+        "policy": "translatecheck/correction-v1",
+        "requires_separate_assessment": true,
+        "suggestion_count": 0
+      }
+    }
+  },
+  "transactions": [
+    {
+      "action": "deploy_checker",
+      "role": "checker",
+      "hash": "0x2203d3f759d949a0f23faf384e5bf4190e9ab9cadb3731be5b6bce34231d9aee",
+      "source_sha256": "d1822ee1ecb294382228f3343ea39cd322e717b45d859c78ef5d9e3c0fdbc28d",
+      "account": "0xdD28e026E2f47124317AF43D34f0DC562EA41928",
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "25000000000000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "100000000000010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": false,
+      "execution_result": "FINISHED_WITH_ERROR",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AmludmFsaWRfY29udHJhY3QgcnVubmVyIG1hbGZvcm1lZA==",
+            "status": "contract_error",
+            "payload": "invalid_contract runner malformed"
+          },
+          "execution_result": "ERROR"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AmludmFsaWRfY29udHJhY3QgcnVubmVyIG1hbGZvcm1lZA==",
+            "status": "contract_error",
+            "payload": "invalid_contract runner malformed"
+          },
+          "execution_result": "ERROR"
+        }
+      ],
+      "completed_at": "2026-09-16T08:10:47.840Z"
+    },
+    {
+      "action": "deploy_checker",
+      "role": "checker",
+      "hash": "0x6a687e5fb31f24df2e509a7ac34c6128ca50b1e3bcaccd3a02b9f9cb2e1a05ba",
+      "source_sha256": "be40be67989c6d2bbc92a55f00b8b8b15e9b0a0b56183f3e1c9764f3aa0315e6",
+      "account": "0x872e80840A224c061C9DCe5188043293Fe0B86EF",
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "25000000000000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "100000000000010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:24:31.509Z"
+    },
+    {
+      "action": "deploy_corrections",
+      "role": "corrections",
+      "hash": "0xfd9a46439804a39c3b21e751efe77c0862baa22d3974976eb734e27b6bab3b50",
+      "source_sha256": "04322807ccd76b84953ab8f270b48d881b8738cf2c97f77d013d1628ed176703",
+      "account": "0x872e80840A224c061C9DCe5188043293Fe0B86EF",
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "25000000000000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "100000000000010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:25:11.700Z"
+    },
+    {
+      "action": "deploy_checker",
+      "role": "checker",
+      "hash": "0xd4f613e71d69e24971dd138f95e69840f6d6d787b5ff19e59d25c1f945bc3b6a",
+      "source_sha256": "4c5037921ec50e138374e6d61b1af9e864454b8c35b0b13ea37a892ff29e3c19",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "25000000000000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "100000000000010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:41:47.918Z"
+    },
+    {
+      "action": "deploy_corrections",
+      "role": "corrections",
+      "hash": "0x3c00e9984fb21ebf21078232b3be6555f03697d0ea7bddeea66540d8e8d0d630",
+      "source_sha256": "6139dde97d71bc356d9af2837937d0f3fa675ec4e9978950af7b18b421b4d2e9",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "25000000000000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "100000000000010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:42:26.447Z"
+    },
+    {
+      "action": "assess_original",
+      "hash": "0xc969844bcc0c98eff469bc894e423072cc66c61fb9a90177e941f66bb592a63d",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "address": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "functionName": "assess",
+      "args": [
+        "You do not need a ticket to enter the exhibition.",
+        "Necesitas una entrada para entrar a la exposición.",
+        "es"
+      ],
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "155305800000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "621223200010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:43:24.821Z"
+    },
+    {
+      "action": "suggest",
+      "hash": "0xbb506feea2c1d5391c201506b2afc7774f1487efc06a33d5d262fd4c96c8ae2a",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "address": "0x275068022df67d8502d1669DF4668e5ccae7EAcf",
+      "functionName": "suggest",
+      "args": [
+        "979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3"
+      ],
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "155460300000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "621841200010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "agree",
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        }
+      ],
+      "completed_at": "2026-09-16T08:44:17.832Z"
+    },
+    {
+      "action": "recheck",
+      "hash": "0xb998a97bfc1ac2d78a577c221f6b04cbc859e15644fa9eb82d874bbe82594334",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "address": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "functionName": "assess",
+      "args": [
+        "You do not need a ticket to enter the exhibition.",
+        "No necesitas una entrada para entrar a la exposición.",
+        "es"
+      ],
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "155459700000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "621838800010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "idle",
+          "result": {
+            "raw": "AmlkbGU=",
+            "status": "contract_error",
+            "payload": "idle"
+          },
+          "execution_result": "ERROR"
+        }
+      ],
+      "completed_at": "2026-09-16T08:45:17.070Z"
+    },
+    {
+      "action": "publish",
+      "hash": "0x95566811398bb9f9b1d5e958bd33a47557fa1181547886d2246665bfbc16cee9",
+      "account": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "address": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "functionName": "publish",
+      "args": [
+        "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+        "You do not need a ticket to enter the exhibition.",
+        "No necesitas una entrada para entrar a la exposición.",
+        "es"
+      ],
+      "fees": {
+        "distribution": {
+          "leaderTimeunitsAllocation": "100",
+          "validatorTimeunitsAllocation": "200",
+          "appealRounds": "0",
+          "executionBudgetPerRound": "153458700000000",
+          "executionConsumed": "0",
+          "totalMessageFees": "0",
+          "rotations": [
+            "3"
+          ],
+          "maxPriceGenPerTimeUnit": "2",
+          "storageFeeMaxGasPrice": "300000000",
+          "receiptFeeMaxGasPrice": "300000000"
+        },
+        "feeValue": "613834800010352"
+      },
+      "status": "FINALIZED",
+      "execution_success": true,
+      "execution_result": "FINISHED_WITH_RETURN",
+      "leader_receipt": [
+        {
+          "mode": "leader",
+          "vote": null,
+          "result": {
+            "raw": "AAA=",
+            "status": "return",
+            "payload": {
+              "raw": [
+                0
+              ],
+              "readable": "null"
+            }
+          },
+          "execution_result": "SUCCESS"
+        },
+        {
+          "mode": "validator",
+          "vote": "idle",
+          "result": {
+            "raw": "AmlkbGU=",
+            "status": "contract_error",
+            "payload": "idle"
+          },
+          "execution_result": "ERROR"
+        }
+      ],
+      "completed_at": "2026-09-16T08:45:58.296Z"
+    }
+  ],
+  "superseded_candidates": [
+    {
+      "contracts": {
+        "checker": {
+          "address": "0x691d98f485477f138790c43610D8Ef89787454D0",
+          "deployment_tx": "0x6a687e5fb31f24df2e509a7ac34c6128ca50b1e3bcaccd3a02b9f9cb2e1a05ba",
+          "source_sha256": "be40be67989c6d2bbc92a55f00b8b8b15e9b0a0b56183f3e1c9764f3aa0315e6",
+          "source_exact": true,
+          "config": {
+            "assessment_count": 0,
+            "languages": {
+              "es": "Spanish",
+              "fr": "French",
+              "zh-CN": "Mandarin Chinese in Simplified Chinese script"
+            },
+            "max_characters": 1200,
+            "policy": "translatecheck/meaning-v1",
+            "publication_count": 0
+          }
+        },
+        "corrections": {
+          "address": "0xD4bcdd835a1791d3CcdC9E35d7D02FA42be39E2A",
+          "deployment_tx": "0xfd9a46439804a39c3b21e751efe77c0862baa22d3974976eb734e27b6bab3b50",
+          "source_sha256": "04322807ccd76b84953ab8f270b48d881b8738cf2c97f77d013d1628ed176703",
+          "source_exact": true,
+          "config": {
+            "advisory_only": true,
+            "checker": "0x691d98f485477f138790c43610D8Ef89787454D0",
+            "policy": "translatecheck/correction-v1",
+            "requires_separate_assessment": true,
+            "suggestion_count": 0
+          }
+        }
+      },
+      "reason": "Simulation found the renamed v0.3 run_nondet API. No application records were created; candidate never published.",
+      "archived_at": "2026-09-16T08:41:08.833Z"
+    }
+  ],
+  "unassessed_correction_gate": {
+    "assessment_id": "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+    "failure_reasons": [
+      "ASSESSMENT_NOT_FOUND"
+    ],
+    "policy": "translatecheck/meaning-v1",
+    "satisfied": false
+  },
+  "workflow": {
+    "original": {
+      "created_at": "2026-09-16T08:42:37.270194Z",
+      "found": true,
+      "id": "979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3",
+      "policy": "translatecheck/meaning-v1",
+      "review": {
+        "explanation": "The translation states the opposite meaning: that a ticket IS required, reversing the source's explicit negation.",
+        "reason_code": "NEGATION",
+        "source_quote": "You do not need a ticket to enter the exhibition.",
+        "translation_quote": "Necesitas una entrada para entrar a la exposición.",
+        "verdict": "CHANGED"
+      },
+      "source": "You do not need a ticket to enter the exhibition.",
+      "submitted_by": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "target": "es",
+      "translation": "Necesitas una entrada para entrar a la exposición."
+    },
+    "original_gate": {
+      "assessment_id": "979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3",
+      "failure_reasons": [
+        "MEANING_CHANGED"
+      ],
+      "policy": "translatecheck/meaning-v1",
+      "satisfied": false
+    },
+    "suggestion": {
+      "advisory_only": true,
+      "checker": "0xc3B4B96695A6f090660dF3733D43962f799A9684",
+      "created_at": "2026-09-16T08:43:36.713476Z",
+      "found": true,
+      "original_translation": "Necesitas una entrada para entrar a la exposición.",
+      "parent_id": "979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3",
+      "policy": "translatecheck/correction-v1",
+      "requested_by": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "requires_separate_assessment": true,
+      "source": "You do not need a ticket to enter the exhibition.",
+      "suggestion": {
+        "explanation": "The original translation omitted the negation 'do not' (No), which reversed the meaning of the source sentence. I added 'No' at the beginning to correctly reflect that a ticket is not required.",
+        "status": "SUGGESTED",
+        "translation": "No necesitas una entrada para entrar a la exposición."
+      },
+      "target": "es"
+    },
+    "revision": {
+      "created_at": "2026-09-16T08:44:29.825965Z",
+      "found": true,
+      "id": "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+      "policy": "translatecheck/meaning-v1",
+      "review": {
+        "explanation": "The translation accurately conveys the same meaning: no ticket is required to enter the exhibition. The negation 'do not need' is correctly rendered as 'No necesitas', 'ticket' as 'entrada', and 'exhibition' as 'exposición'. No material differences in conditions, negations, numbers, or omissions.",
+        "reason_code": "NONE",
+        "source_quote": "You do not need a ticket to enter the exhibition.",
+        "translation_quote": "No necesitas una entrada para entrar a la exposición.",
+        "verdict": "PRESERVED"
+      },
+      "source": "You do not need a ticket to enter the exhibition.",
+      "submitted_by": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a",
+      "target": "es",
+      "translation": "No necesitas una entrada para entrar a la exposición."
+    },
+    "revision_gate": {
+      "assessment_id": "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+      "failure_reasons": [],
+      "policy": "translatecheck/meaning-v1",
+      "satisfied": true
+    },
+    "tampered_gate": {
+      "assessment_id": "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+      "failure_reasons": [
+        "CONTENT_MISMATCH"
+      ],
+      "policy": "translatecheck/meaning-v1",
+      "satisfied": false
+    },
+    "original_unchanged": true,
+    "publication": {
+      "assessment_id": "f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832",
+      "created_at": "2026-09-16T08:45:23.976273Z",
+      "found": true,
+      "id": "3b272ea4e4fb693712b25ca1e7d496e8ddec66b52a132f31213cfc0b05e75ee3",
+      "policy": "translatecheck/meaning-v1",
+      "publisher": "0xf393F6f928ef897c5f7B11abf8963C5b4108535a"
+    },
+    "comparison_url": "https://translatecheck-studionet.vercel.app/?assessment=f7b74d2620367d9c0d854e8b0552d058fa47e3875e48700ad71e551c5cded832&compare=979a836e88c42a093a91d4fb5f6d66bac2584e0692de3a33df7f2060918c87a3"
+  },
+  "completed_at": "2026-09-16T08:45:59.106Z"
+}

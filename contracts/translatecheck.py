@@ -1,5 +1,8 @@
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
-from genlayer import *
+# v0.3.0
+# { "Depends": "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng" }
+import genlayer as gl
+from genlayer.types import Address
+from genlayer.storage import TreeMap, DynArray
 import hashlib
 import json
 
@@ -78,7 +81,7 @@ EVIDENCE:
 """ + evidence
 
 
-class TranslateCheck(gl.Contract):
+class TranslateCheck(gl.contract.Contract):
     assessments: TreeMap[str, str]
     assessment_order: DynArray[str]
     publications: TreeMap[str, str]
@@ -118,11 +121,11 @@ class TranslateCheck(gl.Contract):
             except Exception:
                 return False
 
-        review = gl.vm.run_nondet_unsafe(leader, validator)
+        review = gl.vm.run_nondet(leader, validator)
         review = parse_review(review, source, translation)
         record = {"id": assessment_id, "policy": POLICY, "source": source,
                   "translation": translation, "target": target, "review": review,
-                  "submitted_by": str(gl.message.sender_address), "created_at": gl.message_raw["datetime"]}
+                  "submitted_by": str(gl.message.sender_address), "created_at": gl.message.raw["datetime"]}
         self.assessments[assessment_id] = json.dumps(record, ensure_ascii=False, sort_keys=True)
         self.assessment_order.append(assessment_id)
 
@@ -169,7 +172,7 @@ class TranslateCheck(gl.Contract):
         if publication_id in self.publications:
             raise gl.vm.UserError("[EXPECTED] Already published by this wallet")
         self.publications[publication_id] = json.dumps({"id": publication_id, "assessment_id": assessment_id,
-            "publisher": publisher, "created_at": gl.message_raw["datetime"], "policy": POLICY}, sort_keys=True)
+            "publisher": publisher, "created_at": gl.message.raw["datetime"], "policy": POLICY}, sort_keys=True)
         self.publication_order.append(publication_id)
 
     @gl.public.view

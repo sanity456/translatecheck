@@ -88,6 +88,7 @@ import {
 } from '@/lib/wallet';
 import { registerTranslationTools } from '@/lib/webmcp';
 import { DEPLOYMENT } from '@/lib/deployment';
+import { NETWORK, pendingStorageKey } from '@/lib/network';
 import { RequestFeedback } from '@/lib/feedback';
 import { GoldStream } from '@/app/gold-stream';
 import { Brand, Mascot } from '@/app/brand';
@@ -101,7 +102,7 @@ import {
   type Suggestion,
 } from '@/lib/corrections';
 
-const PENDING_KEY = 'translatecheck:pending:61999:' + DEPLOYMENT.address;
+const PENDING_KEY = pendingStorageKey(DEPLOYMENT.address);
 const STOPPED_KEY = PENDING_KEY + ':last-stopped';
 function recoverStoppedHash(): string | null {
   try {
@@ -662,7 +663,7 @@ export default function Workspace() {
         }
       }
       setNotice(
-        'Confirm the network and transaction in your selected wallet. No tokens are transferred.',
+        'Switch to Studio Next (61997). Estimating the protocol fee before wallet approval.',
       );
       await ensureStudioNet(selectedWallet.provider);
       const accounts = await selectedWallet.provider.request({
@@ -676,7 +677,7 @@ export default function Workspace() {
         throw new Error(
           'The wallet account changed. Reconnect before submitting.',
         );
-      const client = writer(account, selectedWallet.provider);
+      const client = writer(account, selectedWallet.provider, setNotice);
       const args =
         action === 'suggest'
           ? [id]
@@ -740,7 +741,7 @@ export default function Workspace() {
         <div className="header-inner">
           <Brand />
           <div className="header-actions">
-            <span className="network">StudioNet · test network</span>
+            <span className="network">Studio Next · {NETWORK.id}</span>
             <button
               className="secondary"
               onClick={() => {
@@ -1372,12 +1373,20 @@ export default function Workspace() {
                 target="_blank"
                 rel="noreferrer"
               >
-                GenLayer contract ↗
+                Checker contract ↗
               </a>
             ) : (
               'Deployment being verified'
             )}{' '}
-            · exact-text records
+            {correctionsConfigured && (
+              <a
+                href={explorer + '/address/' + correctionsAddress}
+                target="_blank"
+                rel="noreferrer"
+              >
+                · Corrections contract ↗
+              </a>
+            )}
           </span>
           <span>
             Not certified translation. Use qualified human review for
@@ -1428,9 +1437,18 @@ export default function Workspace() {
             <DialogTitle>Connect your wallet</DialogTitle>
             <DialogDescription>
               Choose an Ethereum-compatible wallet. Only writing to GenLayer
-              needs a connection. StudioNet is a gasless development network.
+              needs a connection. This app uses Studio Next (61997), not stable
+              Studio (61999). Transactions require a test GEN fee deposit.
             </DialogDescription>
           </DialogHeader>
+          <p className="footnote">
+            If your wallet needs test funds, use the account faucet in{' '}
+            <a href={NETWORK.studio} target="_blank" rel="noreferrer">
+              Studio Next ↗
+            </a>
+            . Never send real tokens. Old stable Studio records remain on their
+            original network.
+          </p>
           {account && (
             <div className="notice">
               <p>{selectedWallet?.name}</p>

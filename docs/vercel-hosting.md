@@ -24,9 +24,9 @@ not a statement that the current production website is private.
   `ssoProtection.deploymentType = prod_deployment_urls_and_all_previews`.
 - Production domains are public by owner approval. Preview and generated
   deployment URLs remain protected. Do not confuse website access with the
-  GitHub repository's visibility: the repository remains private.
+  GitHub repository's visibility: the repository is now public.
 - There is no connected Git integration or automatic production deployment.
-  The source remains in the private `sanity456/translatecheck` GitHub repository.
+  The source is in the public `sanity456/translatecheck` GitHub repository.
 
 [Vercel's Hobby protection](https://vercel.com/docs/deployment-protection)
 protects preview and generated deployment URLs, but not production domains.

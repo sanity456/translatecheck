@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { CORRECTIONS_DEPLOYMENT } from '../lib/deployment.ts';
 import { pendingKey, workspaceHarness, label } from './workspace-harness.ts';
 import {
   original,
@@ -37,10 +38,7 @@ void test('new correction request only writes suggest to the companion and never
     read: fixtureReader(),
     suggestions: async () => (present ? suggestion : { found: false }),
     write: async (request) => {
-      assert.equal(
-        request.address,
-        '0xCE0e2EbF9CdB30145EE4badcacAecFCCc6bc593e',
-      );
+      assert.equal(request.address, CORRECTIONS_DEPLOYMENT.address);
       assert.deepEqual(Array.from(request.args), [original.id]);
       sent.push(request.functionName);
       present = true;

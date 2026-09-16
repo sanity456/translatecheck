@@ -7,6 +7,7 @@ jobs:
     env:
       PYTHONUTF8: '1'
       PYTHONIOENCODING: utf-8
+      GENVM_VERSION: v0.6.0-rc5
     strategy:
       fail-fast: false
       matrix:

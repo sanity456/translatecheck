@@ -1,3 +1,5 @@
+import { NETWORK, WALLET_NETWORK } from './network.ts';
+
 export type Provider = {
   request(args: { method: string; params?: unknown[] }): Promise<unknown>;
   on?(event: string, listener: (value: unknown) => void): void;
@@ -8,8 +10,8 @@ export type Provider = {
   providers?: Provider[];
 };
 export type WalletOption = { id: string; name: string; provider: Provider };
-export const CHAIN_ID = 61999;
-export const CHAIN_HEX = '0xf22f';
+export const CHAIN_ID = NETWORK.id;
+export const CHAIN_HEX = NETWORK.hex;
 
 export function walletName(provider: Provider) {
   if (provider.isPhantom) return 'Phantom';
@@ -98,11 +100,7 @@ export async function ensureStudioNet(provider: Provider) {
       method: 'wallet_addEthereumChain',
       params: [
         {
-          chainId: CHAIN_HEX,
-          chainName: 'GenLayer StudioNet',
-          nativeCurrency: { name: 'GEN', symbol: 'GEN', decimals: 18 },
-          rpcUrls: ['https://studio.genlayer.com/api'],
-          blockExplorerUrls: ['https://explorer-studio.genlayer.com'],
+          ...WALLET_NETWORK,
         },
       ],
     });
@@ -113,6 +111,6 @@ export async function ensureStudioNet(provider: Provider) {
   }
   if (Number(await provider.request({ method: 'eth_chainId' })) !== CHAIN_ID)
     throw new Error(
-      'Switch your selected wallet to GenLayer StudioNet. Some wallets do not support custom networks.',
+      'Switch your selected wallet to GenLayer Studio Next (61997). Some wallets do not support custom networks.',
     );
 }

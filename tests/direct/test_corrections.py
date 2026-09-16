@@ -11,8 +11,8 @@ NEW = "Livraison gratuite pour les commandes de plus de 50 $."
 @pytest.fixture
 def context(direct_vm, direct_deploy, direct_alice, monkeypatch):
     direct_vm.sender = direct_alice
-    contract = direct_deploy("contracts/translatecheck_corrections.py", CHECKER, sdk_version="v0.2.12")
-    from genlayer import gl
+    contract = direct_deploy("contracts/translatecheck_corrections.py", CHECKER)
+    import genlayer as gl
     record = {"found": True, "id": PARENT, "policy": "translatecheck/meaning-v1",
               "source": "Free delivery on orders over $50.", "translation": OLD, "target": "fr",
               "review": {"verdict": "CHANGED", "reason_code": "CONDITION", "explanation": "Threshold reversed."}}
@@ -21,7 +21,7 @@ def context(direct_vm, direct_deploy, direct_alice, monkeypatch):
     def checker_at(addr):
         assert str(addr).lower() == CHECKER.lower()
         return SimpleNamespace(view=lambda: SimpleNamespace(get_assessment=lambda _: dict(record)))
-    monkeypatch.setattr(gl, "get_contract_at", checker_at)
+    monkeypatch.setattr(gl.contract, "get_at", checker_at)
     return contract, record
 
 

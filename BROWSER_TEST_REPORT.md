@@ -1,5 +1,10 @@
 # Real-wallet browser test report
 
+**Historical evidence: chain 61999, not the current Studio Next release.**
+The active 61997 contract workflow is separately recorded in
+`deployments/studio-next.json`. Do not treat this report as a new manual
+MetaMask signing test on Next; no such claim is made by the migration.
+
 Tested on 2026-09-08 UTC with Chrome, MetaMask, and GenLayer StudioNet (61999).
 The app was owner-private during testing. No tokens were transferred.
 

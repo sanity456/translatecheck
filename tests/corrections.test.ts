@@ -31,7 +31,8 @@ void test('configured deployment hashes match the exact pinned contract sources'
       createHash('sha256').update(source).digest('hex'),
       config.sourceSha256,
     );
-    assert.match(source.split('\n')[0], /py-genlayer:[a-z0-9]{40,}/);
+    assert.equal(source.split('\n')[0].trim(), '# v0.3.0');
+    assert.match(source.split('\n')[1], /py-genlayer:[a-z0-9]{40,}/);
     assert.match(config.address, /^0x[0-9a-fA-F]{40}$/);
   }
 });
